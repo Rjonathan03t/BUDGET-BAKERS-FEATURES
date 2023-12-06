@@ -4,10 +4,10 @@ public class Account {
     private Integer id_account;
     private String username;
     private Integer id_currency;
-    private Integer balance;
+    private Double balance;
     private String type ;
 
-    public Account(Integer id_account, String username, Integer id_currency, Integer balance, String type) {
+    public Account(Integer id_account, String username, Integer id_currency, Double balance, String type) {
         this.id_account = id_account;
         this.username = username;
         this.id_currency = id_currency;
@@ -39,11 +39,11 @@ public class Account {
         this.id_currency = id_currency;
     }
 
-    public Integer getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(Integer balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
