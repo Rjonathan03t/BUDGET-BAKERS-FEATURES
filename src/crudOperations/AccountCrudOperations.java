@@ -27,14 +27,15 @@ public class AccountCrudOperations implements CrudOperations<Account> {
             while (result.next()) {
                 allAccount.add(new Account(
                                 result.getInt("id_account"),
-                                result.getString("username"),
-                                result.getInt("id_currency"),
+                                result.getString("name"),
                                 result.getDouble("balance"),
-                                result.getString("type")
+                                result.getString("type"),
+                                result.getInt("id_currency"),
+                                result.getInt("id_transactions")
                         )
                 );
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println(allAccount);
@@ -44,15 +45,16 @@ public class AccountCrudOperations implements CrudOperations<Account> {
     @Override
     public List<Account> saveAll(List<Account> toSave) throws SQLException {
         List<Account> allAccount = new ArrayList<>();
-        String sql = "INSERT INTO account (id_account, username, id_currency, balance, type) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO account (id_account, name, id_currency, balance, type) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         try {
             for (Account account : toSave) {
                 preparedStatement.setInt(1, account.getId_account());
-                preparedStatement.setString(2, account.getUsername());
-                preparedStatement.setInt(3, account.getId_currency());
-                preparedStatement.setDouble(4, account.getBalance());
-                preparedStatement.setString(5, account.getType());
+                preparedStatement.setString(2, account.getName());
+                preparedStatement.setDouble(3, account.getBalance());
+                preparedStatement.setString(4, account.getType());
+                preparedStatement.setInt(5, account.getId_currency());
+                preparedStatement.setInt(6, account.getId_transactions());
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
@@ -65,14 +67,15 @@ public class AccountCrudOperations implements CrudOperations<Account> {
 
     @Override
     public Account save(Account toSave) throws SQLException {
-        String sql = "INSERT INTO account (id_account, username, id_currency, balance, type) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO account (id_account, name, id_currency, balance, type) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         try {
             preparedStatement.setInt(1, toSave.getId_account());
-            preparedStatement.setString(2, toSave.getUsername());
-            preparedStatement.setInt(3, toSave.getId_currency());
-            preparedStatement.setDouble(4, toSave.getBalance());
-            preparedStatement.setString(5, toSave.getType());
+            preparedStatement.setString(2, toSave.getName());
+            preparedStatement.setDouble(3, toSave.getBalance());
+            preparedStatement.setString(4, toSave.getType());
+            preparedStatement.setInt(5, toSave.getId_currency());
+            preparedStatement.setInt(6, toSave.getId_transactions());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

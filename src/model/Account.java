@@ -1,18 +1,23 @@
 package model;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 public class Account {
     private Integer id_account;
-    private String username;
-    private Integer id_currency;
+    private String name;
     private Double balance;
     private String type ;
+    private Integer id_currency;
+    private Integer id_transactions;
 
-    public Account(Integer id_account, String username, Integer id_currency, Double balance, String type) {
+    public Account(Integer id_account, String name, Double balance, String type, Integer id_currency, Integer id_transactions) {
         this.id_account = id_account;
-        this.username = username;
-        this.id_currency = id_currency;
+        this.name = name;
         this.balance = balance;
         this.type = type;
+        this.id_currency = id_currency;
+        this.id_transactions = id_transactions;
     }
 
     public Integer getId_account() {
@@ -23,20 +28,12 @@ public class Account {
         this.id_account = id_account;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Integer getId_currency() {
-        return id_currency;
-    }
-
-    public void setId_currency(Integer id_currency) {
-        this.id_currency = id_currency;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Double getBalance() {
@@ -55,12 +52,29 @@ public class Account {
         this.type = type;
     }
 
+    public Integer getId_currency() {
+        return id_currency;
+    }
+
+    public void setId_currency(Integer id_currency) {
+        this.id_currency = id_currency;
+    }
+
+    public Integer getId_transactions() {
+        return id_transactions;
+    }
+
+    public void setId_transactions(Integer id_transactions) {
+        this.id_transactions = id_transactions;
+    }
+
     @Override
     public String toString() {
-        return "id_account= " + id_account +
-                ", username= '" + username + '\'' +
-                ", id_currency= " + id_currency +
+        return  "id_account= " + id_account +
+                ", name= '" + name + '\'' +
                 ", balance= " + balance +
-                ", type= '" + type + '\'';
+                ", type= '" + type + '\'' +
+                ", id_currency= " + id_currency +
+                ", id_transactions= " + id_transactions;
     }
 }

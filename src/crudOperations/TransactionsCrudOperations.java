@@ -19,7 +19,7 @@ public class TransactionsCrudOperations implements CrudOperations<Transactions> 
     @Override
     public List<Transactions> findAll() throws SQLException {
         List<Transactions> allTransactions = new ArrayList<>();
-        String sql = "SELECT * FROM transactions_list";
+        String sql = "SELECT * FROM transactions";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
@@ -42,7 +42,7 @@ public class TransactionsCrudOperations implements CrudOperations<Transactions> 
     @Override
     public List<Transactions> saveAll(List<Transactions> toSave) throws SQLException {
         List<Transactions> allTransactions = new ArrayList<>();
-        String sql = "INSERT INTO transactions_list (id_transactions , label , amount , type, date) VALUES (? , ? ,? ,?, ?) ";
+        String sql = "INSERT INTO transactions (id_transactions , label , amount , type, date) VALUES (? , ? ,? ,?, ?) ";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         try{
             for (Transactions transactions : toSave) {
@@ -63,7 +63,7 @@ public class TransactionsCrudOperations implements CrudOperations<Transactions> 
 
     @Override
     public Transactions save(Transactions toSave) throws SQLException {
-        String sql = "INSERT INTO transactions_list(id_transactions , label, amount, type,date) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO transactions(id_transactions , label, amount, type,date) VALUES (?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         try{
             preparedStatement.setInt(1,toSave.getId_transactions());

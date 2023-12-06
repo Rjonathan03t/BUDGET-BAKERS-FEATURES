@@ -26,25 +26,25 @@ public class Main {
             // ACCOUNT CRUD
             AccountCrudOperations accountCrudOperations = new AccountCrudOperations(connection);
             //====FIND ALL
-            //accountCrudOperations.findAll();
+            accountCrudOperations.findAll();
 
             //====SAVE ALL
             List<Account> accountToSave = new ArrayList<>();
-            Account account1 = new Account(6,"saving",1,90000.0,"BANK");
-            Account account2 = new Account(7,"saving",2,40000.0,"MOBILE MONEY");
+            Account account1 = new Account(6,"saving",1000.0,"BANK",1,1);
+            Account account2 = new Account(7,"saving",20000.0,"MOBILE MONEY",1, 2);
             accountToSave.add(account1);
             accountToSave.add(account2);
             //accountCrudOperations.saveAll(accountToSave);
 
             //====SAVE
-            Account account = new Account(8,"saving",1,100000.0,"CASH");
+            Account account = new Account(8,"saving",50000.0,"CASH",2,3);
             //accountCrudOperations.save(account);
 
 
             // TRANSACTIONS CRUD
             TransactionsCrudOperations transactionsCrudOperations = new TransactionsCrudOperations(connection);
             //====FIND ALL
-            transactionsCrudOperations.findAll();
+            //transactionsCrudOperations.findAll();
 
             //====SAVE ALL
             List<Transactions> transactionsToSave = new ArrayList<>();
