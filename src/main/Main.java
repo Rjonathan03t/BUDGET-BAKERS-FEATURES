@@ -64,7 +64,7 @@ public class Main {
             currencyCrudOperations.findAll();
 
             //====SAVE
-            Currency currency = new Currency(1, "USD", "US Dollar");
+            Currency currency = new Currency(1, "Euro", "EUR");
             currencyCrudOperations.save(currency);
 
             //====DELETE

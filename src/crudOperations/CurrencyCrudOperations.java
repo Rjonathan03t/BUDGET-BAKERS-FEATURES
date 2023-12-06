@@ -26,8 +26,9 @@ public class CurrencyCrudOperations implements CrudOperations<Currency> {
             while (result.next()) {
                 allCurrencies.add(new Currency(
                         result.getInt("id_currency"),
-                        result.getString("code"),
-                        result.getString("name")
+                        result.getString("name"),
+                        result.getString("code")
+                        
                     )
                 );
             }
@@ -39,13 +40,14 @@ public class CurrencyCrudOperations implements CrudOperations<Currency> {
     @Override
     public List<Currency> saveAll(List<Currency> toSave) throws SQLException {
         List<Currency> allCurrencies = new ArrayList<>();
-        String sql = "INSERT INTO currency (id_currency, code, name) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO currency (id_currency, name, code) VALUES (?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         try {
             for (Currency currency : toSave) {
                 preparedStatement.setInt(1, currency.getId_currency());
-                preparedStatement.setString(2, currency.getCode());
                 preparedStatement.setString(3, currency.getName());
+                preparedStatement.setString(2, currency.getCode());
+                
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
@@ -58,12 +60,13 @@ public class CurrencyCrudOperations implements CrudOperations<Currency> {
 
     @Override
     public Currency save(Currency toSave) throws SQLException {
-        String sql = "INSERT INTO currency (id_currency, code, name) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO currency (id_currency, name, code) VALUES (?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         try {
             preparedStatement.setInt(1, toSave.getId_currency());
-            preparedStatement.setString(2, toSave.getCode());
             preparedStatement.setString(3, toSave.getName());
+            preparedStatement.setString(2, toSave.getCode());
+            
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

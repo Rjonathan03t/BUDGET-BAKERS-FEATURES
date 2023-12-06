@@ -2,13 +2,15 @@ package model;
 
 public class Currency {
     private Integer id_currency;
-    private String code;
     private String name;
+    private String code;
+    
 
-    public Currency(Integer id_currency, String code, String name) {
+    public Currency(Integer id_currency, String name, String code) {
         this.id_currency = id_currency;
-        this.code = code;
         this.name = name;
+        this.code = code;
+        
     }
 
     public Integer getId_currency() {
@@ -19,14 +21,6 @@ public class Currency {
         this.id_currency = id_currency;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public String getName() {
         return name;
     }
@@ -35,12 +29,22 @@ public class Currency {
         this.name = name;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    
+
     @Override
     public String toString() {
         return "Currency{" +
                 "id_currency=" + id_currency +
-                ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
-                '}';
+                ", code='" + code + '\'' +
+                 '}';
     }
 }
