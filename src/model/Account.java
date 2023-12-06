@@ -7,7 +7,7 @@ public class Account {
     private Integer id_account;
     private String name;
     private Double balance;
-    private String type ;
+    private String type;
     private Integer id_currency;
     private Integer id_transactions;
 
@@ -70,7 +70,7 @@ public class Account {
 
     @Override
     public String toString() {
-        return  "id_account= " + id_account +
+        return "id_account= " + id_account +
                 ", name= '" + name + '\'' +
                 ", balance= " + balance +
                 ", type= '" + type + '\'' +

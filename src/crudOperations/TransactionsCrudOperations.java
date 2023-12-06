@@ -65,14 +65,14 @@ public class TransactionsCrudOperations implements CrudOperations<Transactions> 
     public Transactions save(Transactions toSave) throws SQLException {
         String sql = "INSERT INTO transactions(id_transactions , label, amount, type,date) VALUES (?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        try{
-            preparedStatement.setInt(1,toSave.getId_transactions());
-            preparedStatement.setString(2,toSave.getLabel());
-            preparedStatement.setDouble(3,toSave.getAmount());
-            preparedStatement.setString(4,toSave.getType());
+        try {
+            preparedStatement.setInt(1, toSave.getId_transactions());
+            preparedStatement.setString(2, toSave.getLabel());
+            preparedStatement.setDouble(3, toSave.getAmount());
+            preparedStatement.setString(4, toSave.getType());
             preparedStatement.setTimestamp(5, Timestamp.valueOf(toSave.getDate()));
             preparedStatement.executeUpdate();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println("INSERT 01");
