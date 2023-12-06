@@ -27,7 +27,7 @@ paths:
           name: filter
           schema:
             properties:
-              starDate:
+              startDate:
                 type: string
                 format: date
               endDate:
@@ -35,7 +35,7 @@ paths:
                 format: date
       responses:
         200:
-          description: The list of filtered account
+          description: The list of filtered accounts
           content:
             application/json:
               schema:
@@ -160,29 +160,29 @@ components:
     account:
       type: object
       properties:
-        accountId:
-          type: integer
-        username:
-          type: string
-        number:
-          type: integer
-        balance:
-          type: integer
-        status:
-          type: string
-          enum:
-            - ACTIVE
-            - INACTIVE
-
-    currency:
-      type: object
-      properties:
-        id_currency:
+        id_account:
           type: integer
         name:
           type: string
-        code:
+          enum:
+            - saving
+            - current
+        balance:
+          type: number
+        type:
           type: string
+          enum:
+            - BANK
+            - CASH
+            - MOBILE MONEY
+        id_currency:
+          type: integer
+        id_transactions:
+          type: integer
       required:
+        - id_account
         - name
-        - code
+        - balance
+        - type
+        - id_currency
+        - id_transactions
