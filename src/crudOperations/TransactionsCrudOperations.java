@@ -28,7 +28,8 @@ public class TransactionsCrudOperations implements CrudOperations<Transactions> 
                                 result.getInt("id_transactions"),
                                 result.getString("label"),
                                 result.getDouble("amount"),
-                                result.getString("type")
+                                result.getString("type"),
+                                result.getDate("date").toLocalDate()
                         )
                 );
             }
@@ -41,6 +42,8 @@ public class TransactionsCrudOperations implements CrudOperations<Transactions> 
 
     @Override
     public List<Transactions> saveAll(List<Transactions> toSave) throws SQLException {
+        List<Transactions> allTransactions = new ArrayList<>();
+        String sql = "INSERT INTO transactions_list (id_transactions , label , amount , type, date) VALUES (? , ? ,? ,?, ?) ";
         return null;
     }
 
