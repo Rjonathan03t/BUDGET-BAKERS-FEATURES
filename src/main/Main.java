@@ -3,11 +3,13 @@ package Main;
 import crudOperations.AccountCrudOperations;
 import crudOperations.TransactionsCrudOperations;
 import model.Account;
+import model.Transactions;
 
 import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,18 @@ public class Main {
             TransactionsCrudOperations transactionsCrudOperations = new TransactionsCrudOperations(connection);
             //====FIND ALL
             transactionsCrudOperations.findAll();
+
+            //====SAVE ALL
+            List<Transactions> transactionsToSave = new ArrayList<>();
+            Transactions transactions1 = new Transactions(4,"game",90000.0,"DEBIT", LocalDate.of(2023,12,06));
+            Transactions transactions2 = new Transactions(5,"food",50000.0,"DEBIT", LocalDate.of(2023,11,06));
+            transactionsToSave.add(transactions1);
+            transactionsToSave.add(transactions2);
+           //transactionsCrudOperations.saveAll(transactionsToSave);
+
+            //==== SAVE
+            Transactions transactions = new Transactions(6, "benevola" , 20000.0,"CREDIT",LocalDate.of(2023,11,05));
+            //transactionsCrudOperations.save(transactions);
 
             // Currency CRUD
             //CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);

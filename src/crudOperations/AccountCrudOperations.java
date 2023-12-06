@@ -21,7 +21,8 @@ public class AccountCrudOperations implements CrudOperations<Account> {
     public List<Account> findAll() throws SQLException {
         List<Account> allAccount = new ArrayList<>();
         String sql = "SELECT * FROM account";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try {
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
                 allAccount.add(new Account(
@@ -33,6 +34,8 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                         )
                 );
             }
+        }catch(SQLException e){
+            e.printStackTrace();
         }
         System.out.println(allAccount);
         return allAccount;
