@@ -58,14 +58,17 @@ public class Main {
             Transactions transactions = new Transactions(6, "benevola" , 20000.0,"CREDIT", LocalDateTime.of(2023,11,05,16,58));
             //transactionsCrudOperations.save(transactions);
 
-            // Currency CRUD
-            //CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
+          // Currency CRUD
+            CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
             //====FIND ALL
-            //currencyCrudOperations.findAll();
+            currencyCrudOperations.findAll();
 
             //====SAVE
-            //Currency currency = new Currency(1, "USD", "US Dollar");
-            //currencyCrudOperations.save(currency);
+            Currency currency = new Currency(1, "USD", "US Dollar");
+            currencyCrudOperations.save(currency);
+
+            //====DELETE
+            currencyCrudOperations.delete(currency);
 
             // Operations on currency associations
             //CurrencyAssociationCrudOperations associationCrudOperations = new CurrencyAssociationCrudOperations(connection);
