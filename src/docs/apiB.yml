@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: Budget bakers API
+  version: 1.0.0
+  description: Specification about budget bakers application.
+externalDocs:
+  url: https://github.com/Rjonathan03t/Budget-Bakers
+  description: GITHUB - STD22105 - STD22107
+servers:
+  - url: https://BudgetBakers.com
+paths:
+  /Account:
+    get:
+      tags:
+        - account
+      summary: Get all accounts
+      description: The returned accounts are ordered by updated datetime.
+      operationId: getAccounts
+      parameters:
+        - in: query
+          name: accountNumber
+          description: Filter return account by given number
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: filter
+          schema:
+            properties:
+              starDate:
+                type: string
+                format: date
+              endDate:
+                type: string
+                format: date
+      responses:
+        200:
+          description: The list of filtered account
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/account'
+
+  /Currency:
+    get:
+      tags:
+        - currency
+      summary: Get all currencies
+      description: Retrieve a list of all available currencies.
+      operationId: getCurrencies
+      responses:
+        200:
+          description: The list of currencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/currency'
+
+  /CurrencyAssociation:
+    get:
+      tags:
+        - currencyAssociation
+      summary: Get all currency associations
+      description: Retrieve a list of all currency associations.
+      operationId: getCurrencyAssociations
+      responses:
+        200:
+          description: The list of currency associations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/currencyAssociation'
+
+components:
+  schemas:
+    account:
+      type: object
+      properties:
+        accountId:
+          type: integer
+        username:
+          type: string
+        number:
+          type: integer
+        balance:
+          type: integer
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+
+    currency:
+      type: object
+      properties:
+        id_currency:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+
+    currencyAssociation:
+      type: object
+      properties:
+        id_association:
+          type: integer
+        id_account:
+          type: integer
+        id_currency:
+          type: integer
