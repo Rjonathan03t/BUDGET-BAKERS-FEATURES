@@ -2,11 +2,14 @@ package crudOperations;
 
 import genericInterface.CrudOperations;
 import model.Account;
+import model.Transactions;
+import org.w3c.dom.ls.LSOutput;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +62,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
             }
             preparedStatement.executeBatch();
         } catch (SQLException e) {
-            ;
+            e.printStackTrace();
         }
         System.out.println("INSERT 01");
         return allAccount;
@@ -83,4 +86,52 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         System.out.println("INSERT 01");
         return toSave;
     }
+    //======================= METHOD for making transactions (NOT DONE YET) ===============================
+    public Account selectOne(int id_account) throws SQLException {
+        Account account = null;
+        String sql = "SELECT * FROM account WHERE id_account = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id_account);
+            try (ResultSet result = preparedStatement.executeQuery()) {
+                while (result.next()) {
+                    account = new Account(
+                            result.getInt("id_account"),
+                            result.getString("name"),
+                            result.getDouble("balance"),
+                            result.getString("type"),
+                            result.getInt("id_currency"),
+                            result.getInt("id_transactions")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return account;
+    }
+
+    public void credit(double amount, int id_account) throws SQLException {
+        String sql = "UPDATE account SET balance = balance + ? WHERE id_account = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try {
+            preparedStatement.setDouble(1, amount);
+            preparedStatement.setInt(2, id_account);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("UPDATE 01");
+    }
+
+    public void transactions(double amount)throws SQLException{
+        Transactions transactions = new Transactions(1,"group",amount,"MOBILE MONEY", LocalDateTime.now());
+    }
+
+    public Account makeCredit(double amount, int id_account) throws SQLException {
+        credit(amount,id_account);
+        return selectOne(id_account);
+    }
+   //======================================================================================
 }
