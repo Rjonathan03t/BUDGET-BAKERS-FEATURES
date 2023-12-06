@@ -48,11 +48,11 @@ paths:
       tags:
         - currency
       summary: Get all currencies
-      description: Retrieve a list of all available currencies.
-      operationId: getCurrencies
+      description: Retrieve a list of all currencies.
+      operationId: getAllCurrencies
       responses:
         200:
-          description: The list of currencies
+          description: Successful response
           content:
             application/json:
               schema:
@@ -60,22 +60,100 @@ paths:
                 items:
                   $ref: '#/components/schemas/currency'
 
-  /CurrencyAssociation:
-    get:
+    post:
       tags:
-        - currencyAssociation
-      summary: Get all currency associations
-      description: Retrieve a list of all currency associations.
-      operationId: getCurrencyAssociations
+        - currency
+      summary: Create a new currency
+      description: Add a new currency to the system.
+      operationId: createCurrency
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/currency'
       responses:
-        200:
-          description: The list of currency associations
+        201:
+          description: Currency created successfully
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/currencyAssociation'
+                $ref: '#/components/schemas/currency'
+        400:
+          description: Invalid request data
+
+  /Currency/{id}:
+    get:
+      tags:
+        - currency
+      summary: Get currency by ID
+      description: Retrieve currency information based on its ID.
+      operationId: getCurrencyById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/currency'
+        404:
+          description: Currency not found
+
+    put:
+      tags:
+        - currency
+      summary: Update currency by ID
+      description: Update currency information based on its ID.
+      operationId: updateCurrencyById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/currency'
+      responses:
+        200:
+          description: Currency updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/currency'
+        404:
+          description: Currency not found
+
+    delete:
+      tags:
+        - currency
+      summary: Delete currency by ID
+      description: Remove a currency from the system based on its ID.
+      operationId: deleteCurrencyById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Currency deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/currency'
+        404:
+          description: Currency not found
 
 components:
   schemas:
@@ -101,17 +179,10 @@ components:
       properties:
         id_currency:
           type: integer
-        code:
-          type: string
         name:
           type: string
-
-    currencyAssociation:
-      type: object
-      properties:
-        id_association:
-          type: integer
-        id_account:
-          type: integer
-        id_currency:
-          type: integer
+        code:
+          type: string
+      required:
+        - name
+        - code
