@@ -28,7 +28,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                                 result.getInt("id_account"),
                                 result.getString("username"),
                                 result.getInt("id_currency"),
-                                result.getInt("balance"),
+                                result.getDouble("balance"),
                                 result.getString("type")
                         )
                 );
@@ -48,7 +48,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                 preparedStatement.setInt(1, account.getId_account());
                 preparedStatement.setString(2, account.getUsername());
                 preparedStatement.setInt(3, account.getId_currency());
-                preparedStatement.setInt(4, account.getBalance());
+                preparedStatement.setDouble(4, account.getBalance());
                 preparedStatement.setString(5, account.getType());
                 preparedStatement.addBatch();
             }
@@ -68,7 +68,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
             preparedStatement.setInt(1, toSave.getId_account());
             preparedStatement.setString(2, toSave.getUsername());
             preparedStatement.setInt(3, toSave.getId_currency());
-            preparedStatement.setInt(4, toSave.getBalance());
+            preparedStatement.setDouble(4, toSave.getBalance());
             preparedStatement.setString(5, toSave.getType());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

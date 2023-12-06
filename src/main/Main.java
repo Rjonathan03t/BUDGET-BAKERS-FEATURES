@@ -1,6 +1,7 @@
 package Main;
 
 import crudOperations.AccountCrudOperations;
+import crudOperations.TransactionsCrudOperations;
 import model.Account;
 
 import java.awt.*;
@@ -19,24 +20,28 @@ public class Main {
         try {
             Connection connection = DriverManager.getConnection(jdbcUrl, user, password);
 
+            // ACCOUNT CRUD
             AccountCrudOperations accountCrudOperations = new AccountCrudOperations(connection);
             //====FIND ALL
-            accountCrudOperations.findAll();
+            //accountCrudOperations.findAll();
 
             //====SAVE ALL
             List<Account> accountToSave = new ArrayList<>();
-            Account account1 = new Account(6,"Mina",1,90000,"BANK");
-            Account account2 = new Account(7,"Crom",2,40000,"MOBILE MONEY");
+            Account account1 = new Account(6,"saving",1,90000.0,"BANK");
+            Account account2 = new Account(7,"saving",2,40000.0,"MOBILE MONEY");
             accountToSave.add(account1);
             accountToSave.add(account2);
             //accountCrudOperations.saveAll(accountToSave);
 
             //====SAVE
-            Account account = new Account(8,"Ilay",1,100000,"CASH");
+            Account account = new Account(8,"saving",1,100000.0,"CASH");
             //accountCrudOperations.save(account);
 
 
-
+            // TRANSACTIONS CRUD
+            TransactionsCrudOperations transactionsCrudOperations = new TransactionsCrudOperations(connection);
+            //====FIND ALL
+            transactionsCrudOperations.findAll();
 
             // Currency CRUD
             //CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
