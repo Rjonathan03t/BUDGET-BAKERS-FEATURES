@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS currency (
+   id_currency INT PRIMARY KEY,
+   code VARCHAR(3) NOT NULL,
+   name VARCHAR(150) NOT NULL
+);
+
+INSERT INTO currency VALUES (1,'EUR','EURO');
+INSERT INTO currency VALUES (2,'MGA','ARIARY');
