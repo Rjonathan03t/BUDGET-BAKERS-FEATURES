@@ -1,16 +1,20 @@
 package model;
 
+import java.time.LocalDate;
+
 public class Transactions {
     private Integer id_transactions;
     private String label;
     private Double amount;
     private String type;
+    private LocalDate date;
 
-    public Transactions(Integer id_transactions, String label, Double amount, String type) {
+    public Transactions(Integer id_transactions, String label, Double amount, String type, LocalDate date) {
         this.id_transactions = id_transactions;
         this.label = label;
         this.amount = amount;
         this.type = type;
+        this.date = date;
     }
 
     public Integer getId_transactions() {
@@ -45,11 +49,20 @@ public class Transactions {
         this.type = type;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return  "id_transactions= " + id_transactions +
                 ", label= '" + label + '\'' +
                 ", amount= " + amount +
-                ", type= '" + type + '\'';
+                ", type= '" + type + '\'' +
+                ", date= " + date ;
     }
 }
