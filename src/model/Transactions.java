@@ -1,16 +1,15 @@
 package model;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Transactions {
     private Integer id_transactions;
     private String label;
     private Double amount;
     private String type;
-    private LocalDate date;
+    private LocalDateTime date;
 
-    public Transactions(Integer id_transactions, String label, Double amount, String type, LocalDate date) {
+    public Transactions(Integer id_transactions, String label, Double amount, String type, LocalDateTime date) {
         this.id_transactions = id_transactions;
         this.label = label;
         this.amount = amount;
@@ -50,7 +49,7 @@ public class Transactions {
         this.type = type;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -63,7 +62,7 @@ public class Transactions {
                 ", date= " + date ;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 }
