@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,14 +48,14 @@ public class Main {
 
             //====SAVE ALL
             List<Transactions> transactionsToSave = new ArrayList<>();
-            Transactions transactions1 = new Transactions(4,"game",90000.0,"DEBIT", LocalDate.of(2023,12,06));
-            Transactions transactions2 = new Transactions(5,"food",50000.0,"DEBIT", LocalDate.of(2023,11,06));
+            Transactions transactions1 = new Transactions(4,"game",90000.0,"DEBIT", LocalDateTime.of(2023,12,06, 05, 00));
+            Transactions transactions2 = new Transactions(5,"food",50000.0,"DEBIT", LocalDateTime.of(2023,11,06,12,40));
             transactionsToSave.add(transactions1);
             transactionsToSave.add(transactions2);
            //transactionsCrudOperations.saveAll(transactionsToSave);
 
             //==== SAVE
-            Transactions transactions = new Transactions(6, "benevola" , 20000.0,"CREDIT",LocalDate.of(2023,11,05));
+            Transactions transactions = new Transactions(6, "benevola" , 20000.0,"CREDIT", LocalDateTime.of(2023,11,05,16,58));
             //transactionsCrudOperations.save(transactions);
 
             // Currency CRUD

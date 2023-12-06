@@ -5,6 +5,7 @@ import model.Account;
 import model.Transactions;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class TransactionsCrudOperations implements CrudOperations<Transactions> 
                                 result.getString("label"),
                                 result.getDouble("amount"),
                                 result.getString("type"),
-                                result.getDate("date").toLocalDate()
+                                result.getTimestamp("date").toLocalDateTime()
                         )
                 );
             }
@@ -49,7 +50,7 @@ public class TransactionsCrudOperations implements CrudOperations<Transactions> 
                 preparedStatement.setString(2, transactions.getLabel());
                 preparedStatement.setDouble(3, transactions.getAmount());
                 preparedStatement.setString(4, transactions.getType());
-                preparedStatement.setDate(5, Date.valueOf(transactions.getDate()));
+                preparedStatement.setTimestamp(5, Timestamp.valueOf(transactions.getDate()));
                 preparedStatement.addBatch();
                 preparedStatement.executeUpdate();
             }
@@ -69,7 +70,7 @@ public class TransactionsCrudOperations implements CrudOperations<Transactions> 
             preparedStatement.setString(2,toSave.getLabel());
             preparedStatement.setDouble(3,toSave.getAmount());
             preparedStatement.setString(4,toSave.getType());
-            preparedStatement.setDate(5, Date.valueOf(toSave.getDate()));
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(toSave.getDate()));
             preparedStatement.executeUpdate();
         }catch(SQLException e){
             e.printStackTrace();
