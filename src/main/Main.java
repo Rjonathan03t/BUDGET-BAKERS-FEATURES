@@ -86,6 +86,13 @@ public class Main {
              */
             // associationCrudOperations.saveAll(associationsToSave);
 
+            // Appel de la fonction getBalanceAtDateTime
+            int id_account = 1; 
+            LocalDateTime dateTime = LocalDateTime.of(2023, 12, 6, 4, 0);
+            Double balance = accountCrudOperations.getBalanceAtDateTime(id_account, dateTime);
+
+            System.out.println("Balance at " + dateTime + ": " + balance);
+
         } catch (Exception e) {
             System.out.println("Error about DB connection!");
             e.printStackTrace();
