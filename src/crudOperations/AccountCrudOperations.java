@@ -146,4 +146,28 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         return selectOne(id_account);
     }
    //======================================================================================
+   //=====function for obtaining the balance of an account at a given date and time=====
+
+   public Double getBalanceAtDateTime(int id_account, LocalDateTime dateTime) throws SQLException {
+    Double balance = 0.0;
+    String sql = "SELECT SUM(amount) as total FROM transactions t " +
+                 "JOIN account_transactions at ON t.id_transactions = at.id_transactions " +
+                 "WHERE at.id_account = ? AND t.date <= ?";
+
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        preparedStatement.setInt(1, id_account);
+        preparedStatement.setTimestamp(2, Timestamp.valueOf(dateTime));
+
+        try (ResultSet result = preparedStatement.executeQuery()) {
+            if (result.next()) {
+                balance = result.getDouble("total");
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return balance;
+}
+
 }
