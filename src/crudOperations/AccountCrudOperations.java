@@ -150,9 +150,11 @@ public class AccountCrudOperations implements CrudOperations<Account> {
 
    public Double getBalanceAtDateTime(int id_account, LocalDateTime dateTime) throws SQLException {
     Double balance = 0.0;
-    String sql = "SELECT SUM(amount) as total FROM transactions t " +
+    String sql = "SELECT SUM(CASE WHEN t.type = 'CREDIT' THEN t.amount ELSE -t.amount END) as total " +
+                 "FROM transactions t " +
                  "JOIN account_transactions at ON t.id_transactions = at.id_transactions " +
                  "WHERE at.id_account = ? AND t.date <= ?";
+                 
 
     try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
         preparedStatement.setInt(1, id_account);
