@@ -1,8 +1,10 @@
-package Main;
+package main;
 
 import crudOperations.AccountCrudOperations;
+import crudOperations.CurrencyCrudOperations;
 import crudOperations.TransactionsCrudOperations;
 import model.Account;
+import model.Currency;
 import model.Transactions;
 
 import java.awt.*;
@@ -26,18 +28,18 @@ public class Main {
             // ACCOUNT CRUD
             AccountCrudOperations accountCrudOperations = new AccountCrudOperations(connection);
             //====FIND ALL
-            accountCrudOperations.findAll();
-
+            //accountCrudOperations.findAll();
+            //accountCrudOperations.selectOne(1);
             //====SAVE ALL
             List<Account> accountToSave = new ArrayList<>();
-            Account account1 = new Account(6,"saving",1000.0,"BANK",1,1);
-            Account account2 = new Account(7,"saving",20000.0,"MOBILE MONEY",1, 2);
+            Account account1 = new Account(6,"saving",1000.0,"BANK",1);
+            Account account2 = new Account(7,"saving",20000.0,"MOBILE MONEY",1);
             accountToSave.add(account1);
             accountToSave.add(account2);
             //accountCrudOperations.saveAll(accountToSave);
 
             //====SAVE
-            Account account = new Account(8,"saving",50000.0,"CASH",2,3);
+            Account account = new Account(8,"saving",50000.0,"CASH",2);
             //accountCrudOperations.save(account);
 
 
@@ -58,15 +60,17 @@ public class Main {
             Transactions transactions = new Transactions(6, "benevola" , 20000.0,"CREDIT", LocalDateTime.of(2023,11,05,16,58));
             //transactionsCrudOperations.save(transactions);
 
-            // Currency CRUD
-            //CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
+            //==== TRANSACTION (DEBIT)
+            accountCrudOperations.makeCredit(10000.0,1,1,4);
+
+          // Currency CRUD
+            CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
             //====FIND ALL
             //currencyCrudOperations.findAll();
 
             //====SAVE
-            //Currency currency = new Currency(1, "USD", "US Dollar");
+            Currency currency = new Currency(1, "Euro", "EUR");
             //currencyCrudOperations.save(currency);
-
             // Operations on currency associations
             //CurrencyAssociationCrudOperations associationCrudOperations = new CurrencyAssociationCrudOperations(connection);
 
