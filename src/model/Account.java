@@ -1,6 +1,8 @@
 package model;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 public class Account {
@@ -9,15 +11,13 @@ public class Account {
     private Double balance;
     private String type;
     private Integer id_currency;
-    private Integer id_transactions;
 
-    public Account(Integer id_account, String name, Double balance, String type, Integer id_currency, Integer id_transactions) {
+    public Account(Integer id_account, String name, Double balance, String type, Integer id_currency) {
         this.id_account = id_account;
         this.name = name;
         this.balance = balance;
         this.type = type;
         this.id_currency = id_currency;
-        this.id_transactions = id_transactions;
     }
 
     public Integer getId_account() {
@@ -59,22 +59,12 @@ public class Account {
     public void setId_currency(Integer id_currency) {
         this.id_currency = id_currency;
     }
-
-    public Integer getId_transactions() {
-        return id_transactions;
-    }
-
-    public void setId_transactions(Integer id_transactions) {
-        this.id_transactions = id_transactions;
-    }
-
     @Override
     public String toString() {
         return "id_account= " + id_account +
                 ", name= '" + name + '\'' +
                 ", balance= " + balance +
                 ", type= '" + type + '\'' +
-                ", id_currency= " + id_currency +
-                ", id_transactions= " + id_transactions;
+                ", id_currency= " + id_currency ;
     }
 }

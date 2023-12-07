@@ -74,18 +74,4 @@ public class CurrencyCrudOperations implements CrudOperations<Currency> {
         System.out.println("INSERT currency");
         return toSave;
     }
-
-    @Override
-    public Currency delete(Currency toDelete) throws SQLException {
-        String sql = "DELETE FROM currency WHERE id_currency = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        try{
-            preparedStatement.setInt(1, toDelete.getId_currency());
-            preparedStatement.executeUpdate();
-        } catch(SQLException e){
-            e.printStackTrace();
-        }
-        System.out.println("DELETE currency");
-        return toDelete;
-    }
 }

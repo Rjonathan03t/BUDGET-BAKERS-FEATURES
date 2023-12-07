@@ -33,8 +33,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                                 result.getString("name"),
                                 result.getDouble("balance"),
                                 result.getString("type"),
-                                result.getInt("id_currency"),
-                                result.getInt("id_transactions")
+                                result.getInt("id_currency")
                         )
                 );
             }
@@ -57,7 +56,6 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                 preparedStatement.setDouble(3, account.getBalance());
                 preparedStatement.setString(4, account.getType());
                 preparedStatement.setInt(5, account.getId_currency());
-                preparedStatement.setInt(6, account.getId_transactions());
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
@@ -78,7 +76,6 @@ public class AccountCrudOperations implements CrudOperations<Account> {
             preparedStatement.setDouble(3, toSave.getBalance());
             preparedStatement.setString(4, toSave.getType());
             preparedStatement.setInt(5, toSave.getId_currency());
-            preparedStatement.setInt(6, toSave.getId_transactions());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,7 +83,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         System.out.println("INSERT 01");
         return toSave;
     }
-    //======================= METHOD for making transactions (NOT DONE YET) ===============================
+    //======================= METHOD for making transactions (DONE but account without transactions' list) ===============================
     public Account selectOne(int id_account) throws SQLException {
         Account account = null;
         String sql = "SELECT * FROM account WHERE id_account = ?";
@@ -100,15 +97,14 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                             result.getString("name"),
                             result.getDouble("balance"),
                             result.getString("type"),
-                            result.getInt("id_currency"),
-                            result.getInt("id_transactions")
+                            result.getInt("id_currency")
                     );
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        System.out.println(account);
         return account;
     }
 
@@ -125,11 +121,27 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         System.out.println("UPDATE 01");
     }
 
-    public void transactions(double amount)throws SQLException{
-        Transactions transactions = new Transactions(1,"group",amount,"MOBILE MONEY", LocalDateTime.now());
+    public List<Transactions> transactionsDebit(double amount,int id_account,int id_account_transactions,int id_transactions)throws SQLException{
+        Transactions transactions = new Transactions(id_transactions,"group",amount,"CREDIT", LocalDateTime.now());
+        List<Transactions> Alltransactions = new ArrayList<>();
+        String sql = "INSERT  INTO account_transactions (id_account_transactions,id_account,id_transactions) VALUES (?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try{
+            TransactionsCrudOperations transactionsCrudOperations = new TransactionsCrudOperations(connection);
+            transactionsCrudOperations.save(transactions);
+            preparedStatement.setInt(1,id_account_transactions);
+            preparedStatement.setInt(2,id_account);
+            preparedStatement.setInt(3,id_transactions);
+            preparedStatement.executeUpdate();
+            Alltransactions.add(transactions);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return Alltransactions;
     }
 
-    public Account makeCredit(double amount, int id_account) throws SQLException {
+    public Account makeCredit(double amount, int id_account,int id_account_transactions, int id_transactions) throws SQLException {
+        transactionsDebit(amount,id_account,id_account_transactions,id_transactions);
         credit(amount,id_account);
         return selectOne(id_account);
     }
