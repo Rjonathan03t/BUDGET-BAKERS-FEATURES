@@ -108,6 +108,20 @@ public class Main {
             // Affichez le solde actuel suivi de la date et de l'heure actuelles à droite
             System.out.println("Solde actuel du compte : " + currentBalance + "   Date et heure actuelles : " + currentDateTime);
 
+
+            // Exemple d'utilisation : balanceHistoru
+            int id_account = 1;
+            LocalDateTime startDateTime = LocalDateTime.of(2023, 12, 1, 0, 0);
+            LocalDateTime endDateTime = LocalDateTime.of(2023, 12, 6, 23, 59);
+
+            List<BalanceHistory> balanceHistoryList = accountCrudOperations.getBalanceHistoryInDateTimeRange(id_account, startDateTime, endDateTime);
+
+            // Affiche l'historique du solde
+            for (BalanceHistory balanceHistory : balanceHistoryList) {
+             System.out.println("Date: " + balanceHistory.getDateTime() + ", Solde: " + balanceHistory.getBalance());
+}
+
+
         } catch (Exception e) {
             System.out.println("Error about DB connection!");
             e.printStackTrace();

@@ -189,4 +189,34 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         return getBalanceAtDateTime(id_account, currentDateTime);
     }
 
+
+
+    public List<BalanceHistory> getBalanceHistoryInDateTimeRange(int id_account, LocalDateTime startDateTime, LocalDateTime endDateTime) throws SQLException {
+    List<BalanceHistory> balanceHistoryList = new ArrayList<>();
+    String sql = "SELECT date, SUM(CASE WHEN t.type = 'CREDIT' THEN t.amount ELSE -t.amount END) as total " +
+                 "FROM transactions t " +
+                 "JOIN account_transactions at ON t.id_transactions = at.id_transactions " +
+                 "WHERE at.id_account = ? AND t.date >= ? AND t.date <= ? " +
+                 "GROUP BY t.date ORDER BY t.date";
+
+    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        preparedStatement.setInt(1, id_account);
+        preparedStatement.setTimestamp(2, Timestamp.valueOf(startDateTime));
+        preparedStatement.setTimestamp(3, Timestamp.valueOf(endDateTime));
+
+        try (ResultSet result = preparedStatement.executeQuery()) {
+            while (result.next()) {
+                LocalDateTime dateTime = result.getTimestamp("date").toLocalDateTime();
+                Double balance = result.getDouble("total");
+                balanceHistoryList.add(new BalanceHistory(dateTime, balance));
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return balanceHistoryList;
+}
+
+
 }
