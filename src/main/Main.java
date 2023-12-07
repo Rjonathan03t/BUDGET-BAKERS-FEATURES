@@ -93,6 +93,21 @@ public class Main {
 
             System.out.println("Balance at " + dateTime + ": " + balance);
 
+
+
+            AccountCrudOperations accountCrudOperations = new AccountCrudOperations(connection);
+            // Obtenez la date et l'heure actuelles
+            LocalDateTime currentDateTime = LocalDateTime.now();
+
+            // Obtenez l'ID du compte pour lequel vous souhaitez obtenir le solde actuel
+            int id_account = 1;  // Remplacez par l'ID du compte souhaité
+
+            // Obtenez le solde actuel en utilisant la méthode getCurrentBalance
+            Double currentBalance = accountCrudOperations.getCurrentBalance(id_account, currentDateTime);
+
+            // Affichez le solde actuel suivi de la date et de l'heure actuelles à droite
+            System.out.println("Solde actuel du compte : " + currentBalance + "   Date et heure actuelles : " + currentDateTime);
+
         } catch (Exception e) {
             System.out.println("Error about DB connection!");
             e.printStackTrace();
