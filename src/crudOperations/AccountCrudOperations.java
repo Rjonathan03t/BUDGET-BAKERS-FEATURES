@@ -146,30 +146,47 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         return selectOne(id_account);
     }
    //======================================================================================
-   //=====function for obtaining the balance of an account at a given date and time=====
 
-   public Double getBalanceAtDateTime(int id_account, LocalDateTime dateTime) throws SQLException {
-    Double balance = 0.0;
-    String sql = "SELECT SUM(CASE WHEN t.type = 'CREDIT' THEN t.amount ELSE -t.amount END) as total " +
-                 "FROM transactions t " +
-                 "JOIN account_transactions at ON t.id_transactions = at.id_transactions " +
-                 "WHERE at.id_account = ? AND t.date <= ?";
-                 
+    public Double getCurrentBalance(int id_account) {
+        try {
+            // Obtenez la date et l'heure actuelles
+            LocalDateTime currentDateTime = LocalDateTime.now();
 
-    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-        preparedStatement.setInt(1, id_account);
-        preparedStatement.setTimestamp(2, Timestamp.valueOf(dateTime));
-
-        try (ResultSet result = preparedStatement.executeQuery()) {
-            if (result.next()) {
-                balance = result.getDouble("total");
-            }
+            // Utilisez la méthode existante pour obtenir le solde à la date et à l'heure actuelles
+            return getBalanceAtDateTime(id_account, currentDateTime);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Gérez l'exception selon les besoins de votre application
+            return null;
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+    }
+    //=====function for obtaining the balance of an account at a given date and time=====
+    public Double getBalanceAtDateTime(int id_account, LocalDateTime dateTime) throws SQLException {
+        Double balance = 0.0;
+        String sql = "SELECT SUM(CASE WHEN t.type = 'CREDIT' THEN t.amount ELSE -t.amount END) as total " +
+                     "FROM transactions t " +
+                     "JOIN account_transactions at ON t.id_transactions = at.id_transactions " +
+                     "WHERE at.id_account = ? AND t.date <= ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id_account);
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(dateTime));
+
+            try (ResultSet result = preparedStatement.executeQuery()) {
+                if (result.next()) {
+                    balance = result.getDouble("total");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return balance;
     }
 
-    return balance;
-}
+    // Fonction pour obtenir le solde actuel avec la date et l'heure actuelles
+    public Double getCurrentBalance(int id_account, LocalDateTime currentDateTime) throws SQLException {
+        return getBalanceAtDateTime(id_account, currentDateTime);
+    }
 
 }
