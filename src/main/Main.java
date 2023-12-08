@@ -4,6 +4,7 @@ import crudOperations.AccountCrudOperations;
 import crudOperations.CurrencyCrudOperations;
 import crudOperations.TransactionsCrudOperations;
 import model.Account;
+import model.BalanceHistory;
 import model.Currency;
 import model.Transactions;
 
@@ -32,14 +33,14 @@ public class Main {
             //accountCrudOperations.selectOne(1);
             //====SAVE ALL
             List<Account> accountToSave = new ArrayList<>();
-            Account account1 = new Account(6,"saving",1000.0,"BANK",1);
-            Account account2 = new Account(7,"saving",20000.0,"MOBILE MONEY",1);
+            Account account1 = new Account(6, "saving", 1000.0, "BANK", 1);
+            Account account2 = new Account(7, "saving", 20000.0, "MOBILE MONEY", 1);
             accountToSave.add(account1);
             accountToSave.add(account2);
             //accountCrudOperations.saveAll(accountToSave);
 
             //====SAVE
-            Account account = new Account(8,"saving",50000.0,"CASH",2);
+            Account account = new Account(8, "saving", 50000.0, "CASH", 2);
             //accountCrudOperations.save(account);
 
 
@@ -50,20 +51,21 @@ public class Main {
 
             //====SAVE ALL
             List<Transactions> transactionsToSave = new ArrayList<>();
-            Transactions transactions1 = new Transactions(4,"game",90000.0,"DEBIT", LocalDateTime.of(2023,12,06, 05, 00));
-            Transactions transactions2 = new Transactions(5,"food",50000.0,"DEBIT", LocalDateTime.of(2023,11,06,12,40));
+            Transactions transactions1 = new Transactions(4, "game", 90000.0, "DEBIT", LocalDateTime.of(2023, 12, 06, 05, 00));
+            Transactions transactions2 = new Transactions(5, "food", 50000.0, "DEBIT", LocalDateTime.of(2023, 11, 06, 12, 40));
             transactionsToSave.add(transactions1);
             transactionsToSave.add(transactions2);
-           //transactionsCrudOperations.saveAll(transactionsToSave);
+            //transactionsCrudOperations.saveAll(transactionsToSave);
 
             //==== SAVE
-            Transactions transactions = new Transactions(6, "benevola" , 20000.0,"CREDIT", LocalDateTime.of(2023,11,05,16,58));
+            Transactions transactions = new Transactions(6, "benevola", 20000.0, "CREDIT", LocalDateTime.of(2023, 11, 05, 16, 58));
             //transactionsCrudOperations.save(transactions);
 
-            //==== TRANSACTION (DEBIT)
-            accountCrudOperations.makeCredit(10000.0,1,1,4);
+            //==== TRANSACTION (CREDIT)
+            //accountCrudOperations.makeCredit(10000.0,1,1,4);
+            accountCrudOperations.doTransfer(10000.0,1,2,3,4,11,12);
 
-          // Currency CRUD
+            // Currency CRUD
             CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
             //====FIND ALL
             //currencyCrudOperations.findAll();
@@ -87,39 +89,43 @@ public class Main {
             // associationCrudOperations.saveAll(associationsToSave);
 
             // Appel de la fonction getBalanceAtDateTime
-            int id_account = 1; 
+            int id_account = 1;
             LocalDateTime dateTime = LocalDateTime.of(2023, 12, 6, 4, 0);
             Double balance = accountCrudOperations.getBalanceAtDateTime(id_account, dateTime);
 
-            System.out.println("Balance at " + dateTime + ": " + balance);
+            //System.out.println("Balance at " + dateTime + ": " + balance);
 
 
-
-            AccountCrudOperations accountCrudOperations = new AccountCrudOperations(connection);
+            //AccountCrudOperations accountCrudOperations = new AccountCrudOperations(connection);
             // Obtenez la date et l'heure actuelles
             LocalDateTime currentDateTime = LocalDateTime.now();
 
             // Obtenez l'ID du compte pour lequel vous souhaitez obtenir le solde actuel
-            int id_account = 1;  // Remplacez par l'ID du compte souhaité
+            // Remplacez par l'ID du compte souhaité
 
             // Obtenez le solde actuel en utilisant la méthode getCurrentBalance
             Double currentBalance = accountCrudOperations.getCurrentBalance(id_account, currentDateTime);
 
             // Affichez le solde actuel suivi de la date et de l'heure actuelles à droite
-            System.out.println("Solde actuel du compte : " + currentBalance + "   Date et heure actuelles : " + currentDateTime);
+            //System.out.println("Solde actuel du compte : " + currentBalance + "   Date et heure actuelles : " + currentDateTime);
 
 
             // Exemple d'utilisation : balanceHistoru
-            int id_account = 1;
+
             LocalDateTime startDateTime = LocalDateTime.of(2023, 12, 1, 0, 0);
             LocalDateTime endDateTime = LocalDateTime.of(2023, 12, 6, 23, 59);
 
             List<BalanceHistory> balanceHistoryList = accountCrudOperations.getBalanceHistoryInDateTimeRange(id_account, startDateTime, endDateTime);
 
             // Affiche l'historique du solde
-            for (BalanceHistory balanceHistory : balanceHistoryList) {
-             System.out.println("Date: " + balanceHistory.getDateTime() + ", Solde: " + balanceHistory.getBalance());
-}
+            //for (BalanceHistory balanceHistory : balanceHistoryList) {
+                //System.out.println("Date: " + balanceHistory.getDateTime() + ", Solde: " + balanceHistory.getBalance());
+
+
+            //}
+//TRANSFER HISTORY
+            //accountCrudOperations.transferHistory(LocalDateTime.of(2023,11,10,1,0),LocalDateTime.of(2023,12,30,1,0));
+            //accountCrudOperations.showAmountWithDate(1);
 
 
         } catch (Exception e) {
