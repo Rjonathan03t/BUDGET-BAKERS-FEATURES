@@ -2,13 +2,11 @@ package crudOperations;
 
 import genericInterface.CrudOperations;
 import model.Account;
+import model.BalanceHistory;
 import model.Transactions;
 import org.w3c.dom.ls.LSOutput;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
