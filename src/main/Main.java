@@ -109,6 +109,19 @@ public class Main {
             System.out.println("Solde actuel du compte : " + currentBalance + "   Date et heure actuelles : " + currentDateTime);
 
 
+             // Effectuer un transfert d'argent du compte 1 au compte 2
+            int sourceAccountId = 1;
+            int destinationAccountId = 2;
+            double amountToTransfer = 100.0;
+
+            // Appel de la méthode transferMoney
+            accountCrudOperations.transferMoney(sourceAccountId, destinationAccountId, amountToTransfer);
+
+            // Afficher les soldes après le transfert
+            System.out.println("Solde du compte source après le transfert : " + accountCrudOperations.selectOne(sourceAccountId).getBalance());
+            System.out.println("Solde du compte destination après le transfert : " + accountCrudOperations.selectOne(destinationAccountId).getBalance());
+
+
             // Exemple d'utilisation : balanceHistoru
             int id_account = 1;
             LocalDateTime startDateTime = LocalDateTime.of(2023, 12, 1, 0, 0);
