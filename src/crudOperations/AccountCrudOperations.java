@@ -5,7 +5,7 @@ import model.Account;
 import model.BalanceHistory;
 import model.Transactions;
 import org.w3c.dom.ls.LSOutput;
-
+import java.time.LocalDate;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -315,5 +315,63 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         return account;
     }
     //====================================================================================================================
+
+    public void transferMoney(int sourceAccountId, int destinationAccountId, double amount) throws SQLException {
+       
+        Account sourceAccount = selectOne(sourceAccountId);
+        Account destinationAccount = selectOne(destinationAccountId);
+
+        // Vérifier si les devises sont différentes et gérer la conversion (Euro vers Ariary)
+        if (!sourceAccount.getId_currency().equals(destinationAccount.getId_currency())) {
+           
+            double exchangeRate = getExchangeRate(sourceAccount.getId_currency(), destinationAccount.getId_currency(), LocalDate.now());
+
+            // Vérifier si le taux de change est disponible
+            if (exchangeRate == -1) {
+                System.out.println("Exchange rate not available for the specified currencies.");
+                return;
+            }
+
+            // Convertir le montant de la source vers la destination
+            amount *= exchangeRate;
+
+           
+            saveExchangeRate(sourceAccount.getId_currency(), destinationAccount.getId_currency(), exchangeRate, LocalDate.now());
+        }
+
+        // Effectuer le transfert d'argent
+        credit(amount, destinationAccountId);
+        debit(amount, sourceAccountId);
+    }
+
+    private void saveExchangeRate(int sourceCurrencyId, int destinationCurrencyId, double exchangeRate, LocalDate date) throws SQLException {
+       
+        String sql = "INSERT INTO currency_exchange_rate (source_currency, destination_currency, exchange_rate, date) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sourceCurrencyId);
+            preparedStatement.setInt(2, destinationCurrencyId);
+            preparedStatement.setDouble(3, exchangeRate);
+            preparedStatement.setDate(4, Date.valueOf(date));
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    private double getExchangeRate(int sourceCurrencyId, int destinationCurrencyId, LocalDate date) throws SQLException {
+       
+        String sql = "SELECT exchange_rate FROM currency_exchange_rate WHERE source_currency = ? AND destination_currency = ? AND date = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, sourceCurrencyId);
+            preparedStatement.setInt(2, destinationCurrencyId);
+            preparedStatement.setDate(3, Date.valueOf(date));
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getDouble("exchange_rate");
+                } else {
+                    return -1; 
+                }
+            }
+        }
+    }
+
 
 }
