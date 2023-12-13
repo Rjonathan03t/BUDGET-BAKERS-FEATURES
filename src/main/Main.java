@@ -3,10 +3,7 @@ package main;
 import crudOperations.AccountCrudOperations;
 import crudOperations.CurrencyCrudOperations;
 import crudOperations.TransactionsCrudOperations;
-import model.Account;
-import model.BalanceHistory;
-import model.Currency;
-import model.Transactions;
+import model.*;
 
 import java.awt.*;
 import java.sql.Connection;
@@ -51,19 +48,40 @@ public class Main {
 
             //====SAVE ALL
             List<Transactions> transactionsToSave = new ArrayList<>();
-            Transactions transactions1 = new Transactions(4, "game", 90000.0, "DEBIT", LocalDateTime.of(2023, 12, 06, 05, 00));
-            Transactions transactions2 = new Transactions(5, "food", 50000.0, "DEBIT", LocalDateTime.of(2023, 11, 06, 12, 40));
-            transactionsToSave.add(transactions1);
-            transactionsToSave.add(transactions2);
+            //Transactions transactions1 = new Transactions(4, "game", 90000.0, "DEBIT", LocalDateTime.of(2023, 12, 06, 05, 00));
+            //Transactions transactions2 = new Transactions(5, "food", 50000.0, "DEBIT", LocalDateTime.of(2023, 11, 06, 12, 40));
+            //transactionsToSave.add(transactions1);
+            //transactionsToSave.add(transactions2);
             //transactionsCrudOperations.saveAll(transactionsToSave);
 
             //==== SAVE
-            Transactions transactions = new Transactions(6, "benevola", 20000.0, "CREDIT", LocalDateTime.of(2023, 11, 05, 16, 58));
+            Transactions transactions = new Transactions(4, "got my salary of this mounth", 20000.0,TransactionType.DEBIT, LocalDateTime.of(2023, 11, 05, 16, 58), TransactionCategory.salary);
             //transactionsCrudOperations.save(transactions);
 
             //==== TRANSACTION (CREDIT)
-            //accountCrudOperations.makeCredit(10000.0,1,1,4);
-            accountCrudOperations.doTransfer(10000.0,1,2,3,4,11,12);
+            accountCrudOperations.makeTransaction(
+                    10000.0,
+                    3,
+                    2,
+                    2,
+                    "got my first billion with this",
+                    TransactionCategory.salary
+            );
+
+            /*accountCrudOperations.doTransfer(
+                    10000.0,
+                    1,
+                    3,
+                    3,
+                    4,
+                    3,
+                    4,
+                    "make credit from her account",
+                    "make debit from his account",
+                    TransactionCategory.salary,
+                    TransactionCategory.restaurant
+            );
+             */
 
             // Currency CRUD
             CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
@@ -91,7 +109,7 @@ public class Main {
             // Appel de la fonction getBalanceAtDateTime
             int id_account = 1;
             LocalDateTime dateTime = LocalDateTime.of(2023, 12, 6, 4, 0);
-            Double balance = accountCrudOperations.getBalanceAtDateTime(id_account, dateTime);
+            //Double balance = accountCrudOperations.getBalanceAtDateTime(id_account, dateTime);
 
             //System.out.println("Balance at " + dateTime + ": " + balance);
 
@@ -104,7 +122,7 @@ public class Main {
             // Remplacez par l'ID du compte souhaité
 
             // Obtenez le solde actuel en utilisant la méthode getCurrentBalance
-            Double currentBalance = accountCrudOperations.getCurrentBalance(id_account, currentDateTime);
+            //Double currentBalance = accountCrudOperations.getCurrentBalance(id_account, currentDateTime);
 
             // Affichez le solde actuel suivi de la date et de l'heure actuelles à droite
             //System.out.println("Solde actuel du compte : " + currentBalance + "   Date et heure actuelles : " + currentDateTime);
@@ -116,11 +134,11 @@ public class Main {
             double amountToTransfer = 100.0;
 
             // Appel de la méthode transferMoney
-            accountCrudOperations.transferMoney(sourceAccountId, destinationAccountId, amountToTransfer);
+            //accountCrudOperations.transferMoney(sourceAccountId, destinationAccountId, amountToTransfer);
 
             // Afficher les soldes après le transfert
-            System.out.println("Solde du compte source après le transfert : " + accountCrudOperations.selectOne(sourceAccountId).getBalance());
-            System.out.println("Solde du compte destination après le transfert : " + accountCrudOperations.selectOne(destinationAccountId).getBalance());
+            //System.out.println("Solde du compte source après le transfert : " + accountCrudOperations.selectOne(sourceAccountId).getBalance());
+            //System.out.println("Solde du compte destination après le transfert : " + accountCrudOperations.selectOne(destinationAccountId).getBalance());
 
 
             // Exemple d'utilisation : balanceHistoru
@@ -128,7 +146,7 @@ public class Main {
             LocalDateTime startDateTime = LocalDateTime.of(2023, 12, 1, 0, 0);
             LocalDateTime endDateTime = LocalDateTime.of(2023, 12, 6, 23, 59);
 
-            List<BalanceHistory> balanceHistoryList = accountCrudOperations.getBalanceHistoryInDateTimeRange(id_account, startDateTime, endDateTime);
+            //List<BalanceHistory> balanceHistoryList = accountCrudOperations.getBalanceHistoryInDateTimeRange(id_account, startDateTime, endDateTime);
 
             // Affiche l'historique du solde
             //for (BalanceHistory balanceHistory : balanceHistoryList) {

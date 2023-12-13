@@ -6,15 +6,22 @@ public class Transactions {
     private Integer id_transactions;
     private String label;
     private Double amount;
-    private String type;
+    private TransactionType type;
     private LocalDateTime date;
+    private TransactionCategory category;
 
-    public Transactions(Integer id_transactions, String label, Double amount, String type, LocalDateTime date) {
+    public Transactions(Integer id_transactions, String label, Double amount, TransactionType type, LocalDateTime date, TransactionCategory category) {
         this.id_transactions = id_transactions;
         this.label = label;
         this.amount = amount;
         this.type = type;
         this.date = date;
+        this.category = category;
+        if(category == TransactionCategory.salary){
+            this.type = TransactionType.CREDIT;
+        }else {
+            this.type = TransactionType.DEBIT;
+        }
     }
 
     public Integer getId_transactions() {
@@ -41,28 +48,37 @@ public class Transactions {
         this.amount = amount;
     }
 
-    public String getType() {
+    public TransactionType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TransactionType type) {
         this.type = type;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
     }
 
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    @Override
-    public String toString() {
-        return  "id_transactions= " + id_transactions +
-                ", label= '" + label + '\'' +
-                ", amount= " + amount +
-                ", type= '" + type + '\'' +
-                ", date= " + date ;
+    public TransactionCategory getCategory() {
+        return category;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public void setCategory(TransactionCategory category) {
+        this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "id_transactions= " + id_transactions +
+                ", label= '" + label + '\'' +
+                ", amount= " + amount +
+                ", type= " + type +
+                ", date= " + date +
+                ", category= " + category;
     }
 }

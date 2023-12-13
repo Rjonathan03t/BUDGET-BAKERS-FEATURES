@@ -1,9 +1,7 @@
 package crudOperations;
 
 import genericInterface.CrudOperations;
-import model.Account;
-import model.BalanceHistory;
-import model.Transactions;
+import model.*;
 import org.w3c.dom.ls.LSOutput;
 import java.time.LocalDate;
 import java.sql.*;
@@ -133,14 +131,14 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         System.out.println("UPDATE 01");
     }
 
-    public List<Transactions> transactionsCredit(double amount, int id_account, int id_account_transactions, int id_transactions) throws SQLException {
-        Transactions transactions = new Transactions(id_transactions, "group", amount, "CREDIT", LocalDateTime.now());
+    public List<Transactions> transactionsCredit(double amount, int id_account, int id_account_transactions, int id_transactions , String label,TransactionCategory category) throws SQLException {
+        Transactions transactions = new Transactions(id_transactions, label, amount,TransactionType.CREDIT ,LocalDateTime.now(), category);
         List<Transactions> Alltransactions = new ArrayList<>();
-        String sql = "INSERT  INTO account_transactions (id_account_transactions,id_account,id_transactions) VALUES (?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String sql1 = "INSERT  INTO account_transactions (id_account_transactions,id_account,id_transactions) VALUES (?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql1);
+        TransactionsCrudOperations transactionsCrudOperations = new TransactionsCrudOperations(connection);
+        transactionsCrudOperations.save(transactions);
         try {
-            TransactionsCrudOperations transactionsCrudOperations = new TransactionsCrudOperations(connection);
-            transactionsCrudOperations.save(transactions);
             preparedStatement.setInt(1, id_account_transactions);
             preparedStatement.setInt(2, id_account);
             preparedStatement.setInt(3, id_transactions);
@@ -151,8 +149,8 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         }
         return Alltransactions;
     }
-    public List<Transactions> transactionsDebit(double amount, int id_account, int id_account_transactions, int id_transactions) throws SQLException {
-        Transactions transactions = new Transactions(id_transactions, "group", amount, "DEBIT", LocalDateTime.now());
+    public List<Transactions> transactionsDebit(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category) throws SQLException {
+        Transactions transactions = new Transactions(id_transactions, label, amount,TransactionType.DEBIT ,LocalDateTime.now(),category);
         List<Transactions> Alltransactions = new ArrayList<>();
         String sql = "INSERT  INTO account_transactions (id_account_transactions,id_account,id_transactions) VALUES (?,?,?) ";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -169,17 +167,22 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         }
         return Alltransactions;
     }
+    //-------- METHOD FOR DOING TRANSACTION WITH CATEGORY ----------------
+    public Account makeTransaction(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category)throws  SQLException{
+        Transactions transactions = new Transactions(id_transactions, label, amount,TransactionType.CREDIT ,LocalDateTime.now(), category);
+        if( transactions.getType() == TransactionType.CREDIT) {
+            return makeCredit(amount, id_account, id_account_transactions, id_transactions,label, category);
+        }else return makeDebit(amount,id_account,id_account_transactions,id_transactions,label,category);
+    }
 
-
-
-    public Account makeCredit(double amount, int id_account, int id_account_transactions, int id_transactions) throws SQLException {
-        transactionsCredit(amount, id_account, id_account_transactions, id_transactions);
+    public Account makeCredit(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category) throws SQLException {
+        transactionsCredit(amount, id_account, id_account_transactions, id_transactions,label, category);
         credit(amount, id_account);
         return selectOne(id_account);
     }
 
-    public Account makeDebit(double amount, int id_account, int id_account_transactions, int id_transactions) throws SQLException {
-        transactionsDebit(amount, id_account, id_account_transactions, id_transactions);
+    public Account makeDebit(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category) throws SQLException {
+        transactionsDebit(amount, id_account, id_account_transactions, id_transactions,label,category);
         debit(amount, id_account);
         return selectOne(id_account);
     }
@@ -256,9 +259,21 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         return balanceHistoryList;
     }
     //============================== METHOD TO DO TRANSFER =================================================
-       public void doTransfer (double amount, int id_account1,int id_account2, int id_account_transactions1,int id_account_transactions2,int id_transactions1,int id_transactions2)throws SQLException{
-           makeCredit( amount,  id_account1,  id_account_transactions1,  id_transactions1);
-           makeDebit( amount,  id_account2,  id_account_transactions2,  id_transactions2);
+       public void doTransfer (
+               double amount,
+               int id_account1,
+               int id_account2,
+               int id_account_transactions1,
+               int id_account_transactions2,
+               int id_transactions1,
+               int id_transactions2,
+               String label1,
+               String label2,
+               TransactionCategory category1,
+               TransactionCategory category2
+       ) throws SQLException {
+           makeCredit( amount,  id_account1,  id_account_transactions1,  id_transactions1,label1,category1);
+           makeDebit( amount,  id_account2,  id_account_transactions2,  id_transactions2,label2,category2);
        }
     //======================================================================================================
     //============================= METHOD TO SHOW TRANSFER HISTORY WITH =======================================================

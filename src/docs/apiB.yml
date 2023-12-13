@@ -133,27 +133,7 @@ paths:
         404:
           description: Currency not found
 
-    delete:
-      tags:
-        - currency
-      summary: Delete currency by ID
-      description: Remove a currency from the system based on its ID.
-      operationId: deleteCurrencyById
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: integer
-      responses:
-        200:
-          description: Currency deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/currency'
-        404:
-          description: Currency not found
+
 
 components:
   schemas:
