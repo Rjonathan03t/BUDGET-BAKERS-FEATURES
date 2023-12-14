@@ -69,11 +69,10 @@ public class Main {
             );
 
              */
-
             accountCrudOperations.doTransfer(
                     10000.0,
                     1,
-                    3,
+                    2,
                     1,
                     2,
                     1,
@@ -81,8 +80,12 @@ public class Main {
                     "make credit from her account",
                     "make debit from his account",
                     TransactionCategory.salary,
-                    TransactionCategory.restaurant
+                    TransactionCategory.restaurant,
+                    1,
+                    LocalDateTime.now()
             );
+
+
 
             // Currency CRUD
             CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
@@ -162,7 +165,7 @@ public class Main {
            
             //TransactionMoneyFlow
             
-            int id_account = 1;  
+            //int id_account = 1;
             LocalDateTime startDate = LocalDateTime.of(2023, 12, 1, 0, 0); 
             LocalDateTime endDate = LocalDateTime.of(2023, 12, 2, 23, 59); 
              //double moneyFlowSum = transactionMoneyFlow.getMoneyFlowSum(id_account, startDate, endDate);

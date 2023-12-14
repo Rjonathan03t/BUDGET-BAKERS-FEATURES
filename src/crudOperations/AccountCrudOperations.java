@@ -271,12 +271,15 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                String label1,
                String label2,
                TransactionCategory category1,
-               TransactionCategory category2
+               TransactionCategory category2,
+               int id_transfer_history,
+               LocalDateTime transfer_date
        ) throws SQLException {
         CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
         if(id_account1 == id_account2){
             System.out.println("can not do the transfer because this is the same account");
         }else if(Objects.equals(currencyCrudOperations.selectOne(id_account1), currencyCrudOperations.selectOne(id_account2))){
+            addToTransferHistory(id_transfer_history,id_account2,id_account1,transfer_date,amount);
             makeCredit( amount,  id_account1,  id_account_transactions1,  id_transactions1,label1,category1);
             makeDebit( amount,  id_account2,  id_account_transactions2,  id_transactions2,label2,category2);
         }else{
@@ -285,8 +288,27 @@ public class AccountCrudOperations implements CrudOperations<Account> {
        }
     //======================================================================================================
     //============================= METHOD TO SHOW TRANSFER HISTORY WITH =======================================================
-
-
+    public void addToTransferHistory(
+            int id_transfer_history,
+            int id_debit_transaction,
+            int id_credit_transaction,
+            LocalDateTime transfer_date,
+            double transfer_amount
+    ) throws SQLException {
+        String sql = "INSERT INTO transfer_history (id_transfer_history,id_debit_transaction,id_credit_transaction, transfer_date, transfer_amount )VALUES (?,?,?,?,?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try{
+            preparedStatement.setInt(1,id_transfer_history);
+            preparedStatement.setInt(2,id_debit_transaction);
+            preparedStatement.setInt(3,id_credit_transaction);
+            preparedStatement.setTimestamp(4,Timestamp.valueOf(transfer_date));
+            preparedStatement.setDouble(5,transfer_amount);
+            preparedStatement.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        System.out.println("INSERT 01 IN TRANSFER HISTORY");
+    }
     public void showAccountTransfer(LocalDateTime startDate , LocalDateTime endDate) throws SQLException {
         String sql = "SELECT id_debit_transaction , id_credit_transaction ,transfer_date FROM transfer_history WHERE transfer_date BETWEEN ? AND ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -298,6 +320,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                 int debit = result.getInt("id_debit_transaction");
                 int credit = result.getInt("id_credit_transaction");
                 LocalDateTime date = result.getTimestamp("transfer_date").toLocalDateTime();
+
                 Account creditAccount = getAccountDetails(credit);
                 Account debitAccount = getAccountDetails(debit);
                 System.out.println("Debit Account Details: " + debitAccount);

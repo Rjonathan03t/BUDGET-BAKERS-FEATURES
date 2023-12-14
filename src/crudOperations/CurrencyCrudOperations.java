@@ -78,16 +78,16 @@ public class CurrencyCrudOperations implements CrudOperations<Currency> {
     public String selectOne(int id_account)throws SQLException{
         String sql = "SELECT currency.name FROM account INNER JOIN currency ON account.id_currency=currency.id_currency WHERE id_account = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        String q=null;
+        String currencyName=null;
         try{
             preparedStatement.setInt(1,id_account);
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-               q= resultSet.getString("name");
+               currencyName= resultSet.getString("name");
             }
         }catch(SQLException e){
             e.printStackTrace();
         }
-        return q;
+        return currencyName;
     }
 }
