@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AccountCrudOperations implements CrudOperations<Account> {
     private Connection connection;
@@ -205,7 +206,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
     //=====function for obtaining the balance of an account at a given date and time=====
     public Double getBalanceAtDateTime(int id_account, LocalDateTime dateTime) throws SQLException {
         Double balance = 0.0;
-        String sql = "SELECT SUM(CASE WHEN t.type = 'CREDIT' THEN t.amount ELSE -t.amount END) as total " +
+        String sql = "SELECT SUM(CASE WHEN t.type = 'CREDIT' THEN t.amount ELSE -t.amount END) as total" +
                 "FROM transactions t " +
                 "JOIN account_transactions at ON t.id_transactions = at.id_transactions " +
                 "WHERE at.id_account = ? AND t.date <= ?";
@@ -272,8 +273,15 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                TransactionCategory category1,
                TransactionCategory category2
        ) throws SQLException {
-           makeCredit( amount,  id_account1,  id_account_transactions1,  id_transactions1,label1,category1);
-           makeDebit( amount,  id_account2,  id_account_transactions2,  id_transactions2,label2,category2);
+        CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
+        if(id_account1 == id_account2){
+            System.out.println("can not do the transfer because this is the same account");
+        }else if(Objects.equals(currencyCrudOperations.selectOne(id_account1), currencyCrudOperations.selectOne(id_account2))){
+            makeCredit( amount,  id_account1,  id_account_transactions1,  id_transactions1,label1,category1);
+            makeDebit( amount,  id_account2,  id_account_transactions2,  id_transactions2,label2,category2);
+        }else{
+            System.out.println("can not do the transfer because this is the same account");
+        }
        }
     //======================================================================================================
     //============================= METHOD TO SHOW TRANSFER HISTORY WITH =======================================================

@@ -59,7 +59,7 @@ public class Main {
             //transactionsCrudOperations.save(transactions);
 
             //==== TRANSACTION (CREDIT)
-            accountCrudOperations.makeTransaction(
+            /*accountCrudOperations.makeTransaction(
                     10000.0,
                     3,
                     2,
@@ -68,20 +68,21 @@ public class Main {
                     TransactionCategory.salary
             );
 
-            /*accountCrudOperations.doTransfer(
+             */
+
+            accountCrudOperations.doTransfer(
                     10000.0,
                     1,
                     3,
-                    3,
-                    4,
-                    3,
-                    4,
+                    1,
+                    2,
+                    1,
+                    2,
                     "make credit from her account",
                     "make debit from his account",
                     TransactionCategory.salary,
                     TransactionCategory.restaurant
             );
-             */
 
             // Currency CRUD
             CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
