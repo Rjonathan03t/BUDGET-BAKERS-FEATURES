@@ -388,5 +388,71 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         }
     }
 
+    public double getMoneyFlowSum(int id_account, LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
+        double totalAmount = 0;
+
+        // Somme des entrées (crédits)
+        String creditSql = "SELECT COALESCE(SUM(amount), 0) AS total_amount FROM transactions " +
+                           "WHERE id_account_destination = ? AND type = 'CREDIT' AND date BETWEEN ? AND ?";
+        try (PreparedStatement creditStatement = connection.prepareStatement(creditSql)) {
+            creditStatement.setInt(1, id_account);
+            creditStatement.setTimestamp(2, Timestamp.valueOf(startDate));
+            creditStatement.setTimestamp(3, Timestamp.valueOf(endDate));
+
+            try (ResultSet creditResult = creditStatement.executeQuery()) {
+                if (creditResult.next()) {
+                    totalAmount += creditResult.getDouble("total_amount");
+                }
+            }
+        }
+
+        // Soustraire la somme des sorties (débits)
+        String debitSql = "SELECT COALESCE(SUM(amount), 0) AS total_amount FROM transactions " +
+                          "WHERE id_account_source = ? AND type = 'DEBIT' AND date BETWEEN ? AND ?";
+        try (PreparedStatement debitStatement = connection.prepareStatement(debitSql)) {
+            debitStatement.setInt(1, id_account);
+            debitStatement.setTimestamp(2, Timestamp.valueOf(startDate));
+            debitStatement.setTimestamp(3, Timestamp.valueOf(endDate));
+
+            try (ResultSet debitResult = debitStatement.executeQuery()) {
+                if (debitResult.next()) {
+                    totalAmount -= debitResult.getDouble("total_amount");
+                }
+            }
+        }
+
+        return totalAmount;
+    }
+
+
+    public double getCategorySum(int id_account, LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
+        double restaurantTotal = 0;
+        double salaireTotal = 0;
+
+        String sql = "SELECT COALESCE(SUM(CASE WHEN t.category = 'restaurant' THEN t.amount ELSE 0 END), 0) AS restaurant_total, " +
+                     "COALESCE(SUM(CASE WHEN t.category = 'salaire' THEN t.amount ELSE 0 END), 0) AS salaire_total " +
+                     "FROM transactions t " +
+                     "LEFT JOIN account_transactions at ON t.id_transactions = at.id_transactions " +
+                     "WHERE at.id_account = ? AND t.date BETWEEN ? AND ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id_account);
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(startDate));
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(endDate));
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    restaurantTotal = resultSet.getDouble("restaurant_total");
+                    salaireTotal = resultSet.getDouble("salaire_total");
+                }
+            }
+        }
+
+        System.out.println("Restaurant Total: " + restaurantTotal);
+        System.out.println("Salaire Total: " + salaireTotal);
+
+        return restaurantTotal + salaireTotal;
+    }
+
 
 }
