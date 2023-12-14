@@ -425,4 +425,34 @@ public class AccountCrudOperations implements CrudOperations<Account> {
     }
 
 
+    public double getCategorySum(int id_account, LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
+        double restaurantTotal = 0;
+        double salaireTotal = 0;
+
+        String sql = "SELECT COALESCE(SUM(CASE WHEN t.category = 'restaurant' THEN t.amount ELSE 0 END), 0) AS restaurant_total, " +
+                     "COALESCE(SUM(CASE WHEN t.category = 'salaire' THEN t.amount ELSE 0 END), 0) AS salaire_total " +
+                     "FROM transactions t " +
+                     "LEFT JOIN account_transactions at ON t.id_transactions = at.id_transactions " +
+                     "WHERE at.id_account = ? AND t.date BETWEEN ? AND ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id_account);
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(startDate));
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(endDate));
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    restaurantTotal = resultSet.getDouble("restaurant_total");
+                    salaireTotal = resultSet.getDouble("salaire_total");
+                }
+            }
+        }
+
+        System.out.println("Restaurant Total: " + restaurantTotal);
+        System.out.println("Salaire Total: " + salaireTotal);
+
+        return restaurantTotal + salaireTotal;
+    }
+
+
 }

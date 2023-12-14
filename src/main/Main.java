@@ -164,11 +164,19 @@ public class Main {
             int id_account = 1;  
             LocalDateTime startDate = LocalDateTime.of(2023, 12, 1, 0, 0); 
             LocalDateTime endDate = LocalDateTime.of(2023, 12, 2, 23, 59); 
+             //double moneyFlowSum = transactionMoneyFlow.getMoneyFlowSum(id_account, startDate, endDate);
 
-            //double moneyFlowSum = transactionMoneyFlow.getMoneyFlowSum(id_account, startDate, endDate);
-
-            
             //System.out.println("Money flow sum: " + moneyFlowSum);
+
+
+            //getCategorySum
+
+            //int id_account = 1;
+            //LocalDateTime startDate = LocalDateTime.of(2023, 12, 1, 0, 0);
+            //LocalDateTime endDate = LocalDateTime.of(2023, 12, 2, 23, 59);
+
+            //double categorySum = crudOperations.getCategorySum(id_account, startDate, endDate);
+           // System.out.println("Total des catégories : " + categorySum);
 
 
         } catch (Exception e) {
