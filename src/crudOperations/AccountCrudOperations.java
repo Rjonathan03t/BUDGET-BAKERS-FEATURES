@@ -388,5 +388,41 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         }
     }
 
+    public double getMoneyFlowSum(int id_account, LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
+        double totalAmount = 0;
+
+        // Somme des entrées (crédits)
+        String creditSql = "SELECT COALESCE(SUM(amount), 0) AS total_amount FROM transactions " +
+                           "WHERE id_account_destination = ? AND type = 'CREDIT' AND date BETWEEN ? AND ?";
+        try (PreparedStatement creditStatement = connection.prepareStatement(creditSql)) {
+            creditStatement.setInt(1, id_account);
+            creditStatement.setTimestamp(2, Timestamp.valueOf(startDate));
+            creditStatement.setTimestamp(3, Timestamp.valueOf(endDate));
+
+            try (ResultSet creditResult = creditStatement.executeQuery()) {
+                if (creditResult.next()) {
+                    totalAmount += creditResult.getDouble("total_amount");
+                }
+            }
+        }
+
+        // Soustraire la somme des sorties (débits)
+        String debitSql = "SELECT COALESCE(SUM(amount), 0) AS total_amount FROM transactions " +
+                          "WHERE id_account_source = ? AND type = 'DEBIT' AND date BETWEEN ? AND ?";
+        try (PreparedStatement debitStatement = connection.prepareStatement(debitSql)) {
+            debitStatement.setInt(1, id_account);
+            debitStatement.setTimestamp(2, Timestamp.valueOf(startDate));
+            debitStatement.setTimestamp(3, Timestamp.valueOf(endDate));
+
+            try (ResultSet debitResult = debitStatement.executeQuery()) {
+                if (debitResult.next()) {
+                    totalAmount -= debitResult.getDouble("total_amount");
+                }
+            }
+        }
+
+        return totalAmount;
+    }
+
 
 }
