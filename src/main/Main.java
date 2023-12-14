@@ -158,14 +158,14 @@ public class Main {
             //accountCrudOperations.transferHistory(LocalDateTime.of(2023,11,10,1,0),LocalDateTime.of(2023,12,30,1,0));
             //accountCrudOperations.showAmountWithDate(1);
 
-            TransactionMoneyFlow transactionMoneyFlow = new TransactionMoneyFlow(connection);
-
+           
+            //TransactionMoneyFlow
             
             int id_account = 1;  
             LocalDateTime startDate = LocalDateTime.of(2023, 12, 1, 0, 0); 
             LocalDateTime endDate = LocalDateTime.of(2023, 12, 2, 23, 59); 
 
-            //double moneyFlowSum = transactionMoneyFlow.getMoneyFlowSum(accountId, startDate, endDate);
+            //double moneyFlowSum = transactionMoneyFlow.getMoneyFlowSum(id_account, startDate, endDate);
 
             
             //System.out.println("Money flow sum: " + moneyFlowSum);
