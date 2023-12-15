@@ -59,7 +59,7 @@ public class Main {
             //transactionsCrudOperations.saveAll(transactionsToSave);
 
             //==== SAVE
-            Transactions transactions = new Transactions(4, "got my salary of this mounth", 20000.0,TransactionType.DEBIT, LocalDateTime.of(2023, 11, 05, 16, 58), TransactionCategory.salary);
+            Transactions transactions = new Transactions(4, "got my salary of this mounth", 20000.0,TransactionType.DEBIT, LocalDateTime.of(2023, 11, 05, 16, 58), TransactionCategory.Salary);
             //transactionsCrudOperations.save(transactions);
 
             //==== TRANSACTION (CREDIT)
