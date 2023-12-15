@@ -109,9 +109,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
     }
     //======================= METHOD for making transactions (DONE but account without transactions' list) ===============================
 
-
-
-    public Double getCurrentBalance(int id_account) {
+     public Double getCurrentBalance(int id_account) {
         try {
             // Obtenez la date et l'heure actuelles
             LocalDateTime currentDateTime = LocalDateTime.now();
@@ -300,10 +298,8 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                 }
             }
         }
-
         System.out.println("Restaurant Total: " + restaurantTotal);
         System.out.println("Salaire Total: " + salaireTotal);
-
         return restaurantTotal + salaireTotal;
     }
 
