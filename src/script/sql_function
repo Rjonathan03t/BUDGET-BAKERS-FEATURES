@@ -1,3 +1,8 @@
+
+--sql function which returns the sum of cash inflows and outflows between the given date range.--
+
+
+
 CREATE OR REPLACE FUNCTION getAccountBalanceByDateRange(id_account INT, start_date TIMESTAMP, end_date TIMESTAMP)
 RETURNS DOUBLE PRECISION AS
 $$
@@ -13,6 +18,10 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+
+
+-- sql function which returns the sum of the amounts of each category, between the given date range--
 
 
 CREATE OR REPLACE FUNCTION getCategorySumByDateRange(id_account INT, start_date TIMESTAMP, end_date TIMESTAMP)
