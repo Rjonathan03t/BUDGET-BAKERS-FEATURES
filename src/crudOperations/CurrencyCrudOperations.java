@@ -1,6 +1,7 @@
 package crudOperations;
 
 import genericInterface.CrudOperations;
+import model.Account;
 import model.Currency;
 
 import java.sql.Connection;
@@ -73,5 +74,20 @@ public class CurrencyCrudOperations implements CrudOperations<Currency> {
         }
         System.out.println("INSERT currency");
         return toSave;
+    }
+    public String selectOne(int id_account)throws SQLException{
+        String sql = "SELECT currency.name FROM account INNER JOIN currency ON account.id_currency=currency.id_currency WHERE id_account = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        String currencyName=null;
+        try{
+            preparedStatement.setInt(1,id_account);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while(resultSet.next()){
+               currencyName= resultSet.getString("name");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return currencyName;
     }
 }

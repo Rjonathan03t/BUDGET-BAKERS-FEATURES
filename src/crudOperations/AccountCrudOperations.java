@@ -1,5 +1,6 @@
 package crudOperations;
 
+import Features.DoTransactions;
 import genericInterface.CrudOperations;
 import model.*;
 import org.w3c.dom.ls.LSOutput;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AccountCrudOperations implements CrudOperations<Account> {
     private Connection connection;
@@ -81,7 +83,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         return toSave;
     }
 
-    //======================= METHOD for making transactions (DONE but account without transactions' list) ===============================
+
     public Account selectOne(int id_account) throws SQLException {
         Account account = null;
         String sql = "SELECT * FROM account WHERE id_account = ?";
@@ -105,90 +107,9 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         System.out.println(account);
         return account;
     }
+    //======================= METHOD for making transactions (DONE but account without transactions' list) ===============================
 
-    public void credit(double amount, int id_account) throws SQLException {
-        String sql = "UPDATE account SET balance = balance + ? WHERE id_account = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        try {
-            preparedStatement.setDouble(1, amount);
-            preparedStatement.setInt(2, id_account);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        System.out.println("UPDATE 01");
-    }
-    public void debit(double amount, int id_account) throws SQLException {
-        String sql = "UPDATE account SET balance = balance - ? WHERE id_account = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        try {
-            preparedStatement.setDouble(1, amount);
-            preparedStatement.setInt(2, id_account);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        System.out.println("UPDATE 01");
-    }
-
-    public List<Transactions> transactionsCredit(double amount, int id_account, int id_account_transactions, int id_transactions , String label,TransactionCategory category) throws SQLException {
-        Transactions transactions = new Transactions(id_transactions, label, amount,TransactionType.CREDIT ,LocalDateTime.now(), category);
-        List<Transactions> Alltransactions = new ArrayList<>();
-        String sql1 = "INSERT  INTO account_transactions (id_account_transactions,id_account,id_transactions) VALUES (?,?,?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql1);
-        TransactionsCrudOperations transactionsCrudOperations = new TransactionsCrudOperations(connection);
-        transactionsCrudOperations.save(transactions);
-        try {
-            preparedStatement.setInt(1, id_account_transactions);
-            preparedStatement.setInt(2, id_account);
-            preparedStatement.setInt(3, id_transactions);
-            preparedStatement.executeUpdate();
-            Alltransactions.add(transactions);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Alltransactions;
-    }
-    public List<Transactions> transactionsDebit(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category) throws SQLException {
-        Transactions transactions = new Transactions(id_transactions, label, amount,TransactionType.DEBIT ,LocalDateTime.now(),category);
-        List<Transactions> Alltransactions = new ArrayList<>();
-        String sql = "INSERT  INTO account_transactions (id_account_transactions,id_account,id_transactions) VALUES (?,?,?) ";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        try {
-            TransactionsCrudOperations transactionsCrudOperations = new TransactionsCrudOperations(connection);
-            transactionsCrudOperations.save(transactions);
-            preparedStatement.setInt(1, id_account_transactions);
-            preparedStatement.setInt(2, id_account);
-            preparedStatement.setInt(3, id_transactions);
-            preparedStatement.executeUpdate();
-            Alltransactions.add(transactions);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Alltransactions;
-    }
-    //-------- METHOD FOR DOING TRANSACTION WITH CATEGORY ----------------
-    public Account makeTransaction(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category)throws  SQLException{
-        Transactions transactions = new Transactions(id_transactions, label, amount,TransactionType.CREDIT ,LocalDateTime.now(), category);
-        if( transactions.getType() == TransactionType.CREDIT) {
-            return makeCredit(amount, id_account, id_account_transactions, id_transactions,label, category);
-        }else return makeDebit(amount,id_account,id_account_transactions,id_transactions,label,category);
-    }
-
-    public Account makeCredit(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category) throws SQLException {
-        transactionsCredit(amount, id_account, id_account_transactions, id_transactions,label, category);
-        credit(amount, id_account);
-        return selectOne(id_account);
-    }
-
-    public Account makeDebit(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category) throws SQLException {
-        transactionsDebit(amount, id_account, id_account_transactions, id_transactions,label,category);
-        debit(amount, id_account);
-        return selectOne(id_account);
-    }
-    //======================================================================================
-
-    public Double getCurrentBalance(int id_account) {
+     public Double getCurrentBalance(int id_account) {
         try {
             // Obtenez la date et l'heure actuelles
             LocalDateTime currentDateTime = LocalDateTime.now();
@@ -205,7 +126,7 @@ public class AccountCrudOperations implements CrudOperations<Account> {
     //=====function for obtaining the balance of an account at a given date and time=====
     public Double getBalanceAtDateTime(int id_account, LocalDateTime dateTime) throws SQLException {
         Double balance = 0.0;
-        String sql = "SELECT SUM(CASE WHEN t.type = 'CREDIT' THEN t.amount ELSE -t.amount END) as total " +
+        String sql = "SELECT SUM(CASE WHEN t.type = 'CREDIT' THEN t.amount ELSE -t.amount END) as total" +
                 "FROM transactions t " +
                 "JOIN account_transactions at ON t.id_transactions = at.id_transactions " +
                 "WHERE at.id_account = ? AND t.date <= ?";
@@ -258,81 +179,11 @@ public class AccountCrudOperations implements CrudOperations<Account> {
 
         return balanceHistoryList;
     }
-    //============================== METHOD TO DO TRANSFER =================================================
-       public void doTransfer (
-               double amount,
-               int id_account1,
-               int id_account2,
-               int id_account_transactions1,
-               int id_account_transactions2,
-               int id_transactions1,
-               int id_transactions2,
-               String label1,
-               String label2,
-               TransactionCategory category1,
-               TransactionCategory category2
-       ) throws SQLException {
-           makeCredit( amount,  id_account1,  id_account_transactions1,  id_transactions1,label1,category1);
-           makeDebit( amount,  id_account2,  id_account_transactions2,  id_transactions2,label2,category2);
-       }
-    //======================================================================================================
-    //============================= METHOD TO SHOW TRANSFER HISTORY WITH =======================================================
 
 
-    public void showAccountTransfer(LocalDateTime startDate , LocalDateTime endDate) throws SQLException {
-        String sql = "SELECT id_debit_transaction , id_credit_transaction ,transfer_date FROM transfer_history WHERE transfer_date BETWEEN ? AND ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        try{
-            preparedStatement.setTimestamp(1,Timestamp.valueOf(startDate));
-            preparedStatement.setTimestamp(2,Timestamp.valueOf(endDate));
-            ResultSet result = preparedStatement.executeQuery();
-            while(result.next()){
-                int debit = result.getInt("id_debit_transaction");
-                int credit = result.getInt("id_credit_transaction");
-                LocalDateTime date = result.getTimestamp("transfer_date").toLocalDateTime();
-                Account creditAccount = getAccountDetails(credit);
-                Account debitAccount = getAccountDetails(debit);
-                System.out.println("Debit Account Details: " + debitAccount);
-                System.out.println("Credit Account Details: " + creditAccount);
-                System.out.println("Transfer Date: " + date);
-            }
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
-
-
-    }
-
-    public void transferHistory(LocalDateTime startDate , LocalDateTime endDate) throws SQLException {
-           showAccountTransfer(startDate,endDate);
-    }
-
-    public Account getAccountDetails(int id_account) throws SQLException {
-        Account account = null;
-        String sql = "SELECT * FROM account WHERE id_account = ?";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setInt(1, id_account);
-            try (ResultSet result = preparedStatement.executeQuery()) {
-                while (result.next()) {
-                    account = new Account(
-                            result.getInt("id_account"),
-                            result.getString("name"),
-                            result.getDouble("balance"),
-                            result.getString("type"),
-                            result.getInt("id_currency")
-                    );
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return account;
-    }
-    //====================================================================================================================
 
     public void transferMoney(int sourceAccountId, int destinationAccountId, double amount) throws SQLException {
-       
+        DoTransactions doTransactions = new DoTransactions(connection);
         Account sourceAccount = selectOne(sourceAccountId);
         Account destinationAccount = selectOne(destinationAccountId);
 
@@ -355,8 +206,8 @@ public class AccountCrudOperations implements CrudOperations<Account> {
         }
 
         // Effectuer le transfert d'argent
-        credit(amount, destinationAccountId);
-        debit(amount, sourceAccountId);
+        doTransactions.credit(amount, destinationAccountId);
+        doTransactions.debit(amount, sourceAccountId);
     }
 
     private void saveExchangeRate(int sourceCurrencyId, int destinationCurrencyId, double exchangeRate, LocalDate date) throws SQLException {
@@ -447,10 +298,8 @@ public class AccountCrudOperations implements CrudOperations<Account> {
                 }
             }
         }
-
         System.out.println("Restaurant Total: " + restaurantTotal);
         System.out.println("Salaire Total: " + salaireTotal);
-
         return restaurantTotal + salaireTotal;
     }
 
