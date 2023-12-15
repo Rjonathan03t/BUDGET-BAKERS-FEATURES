@@ -13,3 +13,18 @@ BEGIN
 END;
 $$
 LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION getCategorySumByDateRange(id_account INT, start_date TIMESTAMP, end_date TIMESTAMP)
+RETURNS TABLE (category_name VARCHAR(100), total_amount DOUBLE PRECISION) AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT tc.category_name, COALESCE(SUM(CASE WHEN type = 'CREDIT' THEN amount ELSE -amount END), 0)
+    FROM transactions t
+    LEFT JOIN transaction_category tc ON t.id_category = tc.id_category
+    WHERE t.id_account_source = id_account AND t.date BETWEEN start_date AND end_date
+    GROUP BY tc.category_name;
+END;
+$$
+LANGUAGE plpgsql;

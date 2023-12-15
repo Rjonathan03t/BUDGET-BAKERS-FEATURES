@@ -5,7 +5,12 @@ CREATE TABLE IF NOT EXISTS transactions(
    type VARCHAR (50) CHECK (type = 'CREDIT' OR type = 'DEBIT'),
    date TIMESTAMP,
    category VARCHAR (70),
-   CHECK (category IN ('restaurant','salary','supermarket'))
+   CHECK 
+    (category IN
+     ('restaurant','salary','supermarket','Nourriture_et_Boissons','Achats_et_boutiques_en_ligne',
+     'Logement','Transports','Véhicule','Loisirs','Multimédia_Informatique','Frais_financiers',
+     'Investissements','Revenu','Autres','Inconnu'))
+
 );
 
 
