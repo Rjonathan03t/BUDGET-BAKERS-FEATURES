@@ -1,5 +1,6 @@
 package main;
 
+import Features.CurrencyAverage;
 import Features.DoTransactions;
 import Features.SumOfAmountCategory;
 import Features.Transfer;
@@ -189,11 +190,42 @@ public class Main {
            // System.out.println("Total des catégories : " + categorySum);
 
           //========== SUM OF AMOUNT CATEGORY
-            SumOfAmountCategory sumOfAmountCategory = new SumOfAmountCategory(connection);
+           /* SumOfAmountCategory sumOfAmountCategory = new SumOfAmountCategory(connection);
             sumOfAmountCategory.getSum(
                     LocalDateTime.of(2023,12,15,10,14,19),
                     LocalDateTime.now()
                     );
+
+
+            */
+
+            //================ ALL ABOUT  CURRENCY AT  GIVEN DATE
+            CurrencyAverage currencyAverage = new CurrencyAverage(connection);
+            /*currencyAverage.getAverage(
+                    LocalDateTime.of(2023,12,06, 00,00,00),
+                    LocalDateTime.of(2023,12,06, 23,59,59)
+            );
+
+             */
+
+            /*currencyAverage.getMinCurrency(
+                    LocalDateTime.of(2023,12,06, 00,00,00),
+                    LocalDateTime.of(2023,12,06, 23,59,59)
+            );
+
+             */
+
+           /* currencyAverage.getMaxCurrency(
+                    LocalDateTime.of(2023,12,06, 00,00,00),
+                    LocalDateTime.of(2023,12,06, 23,59,59)
+            );
+
+            */
+
+            currencyAverage.getMedianCurrency(
+                    LocalDateTime.of(2023,12,06, 00,00,00),
+                    LocalDateTime.of(2023,12,06, 23,59,59)
+            );
 
         } catch (Exception e) {
             System.out.println("Error about DB connection!");

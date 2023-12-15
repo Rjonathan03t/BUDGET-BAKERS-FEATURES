@@ -13,6 +13,9 @@ public enum TransactionCategory {
     Investissements,
     Revenu,
     Autres,
+    salary,
+    supermarket,
+
     Inconnu;
 
 }
