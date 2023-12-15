@@ -1,5 +1,8 @@
 package main;
 
+import Features.DoTransactions;
+import Features.SumOfAmountCategory;
+import Features.Transfer;
 import crudOperations.AccountCrudOperations;
 import crudOperations.CurrencyCrudOperations;
 import crudOperations.TransactionsCrudOperations;
@@ -59,33 +62,36 @@ public class Main {
             //transactionsCrudOperations.save(transactions);
 
             //==== TRANSACTION (CREDIT)
-            /*accountCrudOperations.makeTransaction(
+            Transfer transfer = new Transfer(connection);
+            DoTransactions doTransactions = new DoTransactions(connection);
+            /*doTransactions.makeTransaction(
                     10000.0,
                     3,
                     2,
                     2,
-                    "got my first billion with this",
+                    "got my second this mounth",
                     TransactionCategory.salary
             );
 
              */
-            accountCrudOperations.doTransfer(
+            /*transfer.doTransfer(
                     10000.0,
                     1,
                     2,
-                    1,
-                    2,
-                    1,
-                    2,
-                    "make credit from her account",
-                    "make debit from his account",
+                    3,
+                    4,
+                    3,
+                    4,
+                    "creditttt",
+                    "debiittt",
                     TransactionCategory.salary,
                     TransactionCategory.restaurant,
-                    1,
+                    2,
                     LocalDateTime.now()
             );
 
 
+             */
 
             // Currency CRUD
             CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
@@ -182,6 +188,12 @@ public class Main {
             //double categorySum = crudOperations.getCategorySum(id_account, startDate, endDate);
            // System.out.println("Total des catégories : " + categorySum);
 
+          //========== SUM OF AMOUNT CATEGORY
+            SumOfAmountCategory sumOfAmountCategory = new SumOfAmountCategory(connection);
+            sumOfAmountCategory.getSum(
+                    LocalDateTime.of(2023,12,15,10,14,19),
+                    LocalDateTime.now()
+                    );
 
         } catch (Exception e) {
             System.out.println("Error about DB connection!");

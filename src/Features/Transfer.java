@@ -17,7 +17,7 @@ public class Transfer {
         this.connection = connection;
     }
     //============================== METHOD TO DO TRANSFER =================================================
-    DoTransactions transactions = new DoTransactions(connection);
+
 
     public void addToTransferHistory(
             int id_transfer_history,
@@ -57,6 +57,7 @@ public class Transfer {
             LocalDateTime transfer_date
     ) throws SQLException {
         CurrencyCrudOperations currencyCrudOperations = new CurrencyCrudOperations(connection);
+        DoTransactions transactions = new DoTransactions(connection);
         if(id_account1 == id_account2){
             System.out.println("can not do the transfer because this is the same account");
         }else if(Objects.equals(currencyCrudOperations.selectOne(id_account1), currencyCrudOperations.selectOne(id_account2))){

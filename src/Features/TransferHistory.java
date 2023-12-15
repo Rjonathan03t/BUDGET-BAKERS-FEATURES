@@ -39,10 +39,6 @@ public class TransferHistory {
 
     }
 
-    public void transferHistory(LocalDateTime startDate , LocalDateTime endDate) throws SQLException {
-        showAccountTransfer(startDate,endDate);
-    }
-
     public Account getAccountDetails(int id_account) throws SQLException {
         Account account = null;
         String sql = "SELECT * FROM account WHERE id_account = ?";
@@ -64,6 +60,10 @@ public class TransferHistory {
             e.printStackTrace();
         }
         return account;
+    }
+
+    public void transferHistory(LocalDateTime startDate , LocalDateTime endDate) throws SQLException {
+        showAccountTransfer(startDate,endDate);
     }
     //====================================================================================================================
 }

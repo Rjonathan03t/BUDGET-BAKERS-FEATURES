@@ -20,7 +20,7 @@ public class    DoTransactions {
         this.connection = connection;
     }
 
-    AccountCrudOperations accountCrudOperations = new AccountCrudOperations(connection);
+
 
     public void credit(double amount, int id_account) throws SQLException {
         String sql = "UPDATE account SET balance = balance + ? WHERE id_account = ?";
@@ -92,12 +92,14 @@ public class    DoTransactions {
     }
 
     public Account makeCredit(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category) throws SQLException {
+        AccountCrudOperations accountCrudOperations = new AccountCrudOperations(connection);
         transactionsCredit(amount, id_account, id_account_transactions, id_transactions,label, category);
         credit(amount, id_account);
         return accountCrudOperations.selectOne(id_account);
     }
 
     public Account makeDebit(double amount, int id_account, int id_account_transactions, int id_transactions,String label,TransactionCategory category) throws SQLException {
+        AccountCrudOperations accountCrudOperations = new AccountCrudOperations(connection);
         transactionsDebit(amount, id_account, id_account_transactions, id_transactions,label,category);
         debit(amount, id_account);
         return accountCrudOperations.selectOne(id_account);
